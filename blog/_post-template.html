@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+  HOW TO WRITE A NEW POST
+  1. Copy this file and rename it, e.g. blog/my-first-project.html
+     (the name before ".html" is the post's "slug").
+  2. Change the four things marked CHANGE below.
+  3. Write your post inside <div class="prose">.
+  4. Add the post to the "posts" list in js/content.js, using the
+     same slug, so it shows up on the home page and blog list.
+
+  This file starts with "_" so GitHub Pages won't publish it.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Post title | Krish Pokle</title> <!-- CHANGE -->
+  <meta name="description" content="One sentence about this post."> <!-- CHANGE -->
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@400..900&display=swap">
+
+  <link rel="stylesheet" href="../css/style.css">
+  <script src="../js/theme.js"></script>
+  <script src="../js/content.js" defer></script>
+  <script src="../js/main.js" defer></script>
+</head>
+
+<body data-page="blog" data-title="Post title" data-root="../"> <!-- CHANGE data-title -->
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" id="site-header"></header>
+
+  <main id="main" class="narrow">
+    <article>
+      <header class="post-header">
+        <h1>Post title</h1> <!-- CHANGE -->
+        <p class="post-date"><time datetime="2026-01-31">31 January 2026</time></p> <!-- CHANGE -->
+      </header>
+
+      <div class="prose">
+        <p>Start writing here. Each paragraph goes in its own &lt;p&gt; tag.</p>
+
+        <h2>A section heading</h2>
+        <p>Use <strong>bold</strong>, <em>italics</em>, <a href="https://example.com">links</a> and <code>inline code</code>.</p>
+
+        <ul>
+          <li>Bullet points</li>
+          <li>Work like this</li>
+        </ul>
+
+        <!-- Images: put the file in /assets and point to it with "../assets/" -->
+        <!-- <img src="../assets/photo.jpg" alt="Describe the picture"> -->
+      </div>
+
+      <footer class="post-footer">
+        <a href="index.html">Back to all posts</a>
+      </footer>
+    </article>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Resume | Krish Pokle</title>
+  <meta name="description" content="Krish Pokle's resume: experience, education and skills.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@400..900&display=swap">
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+
+<body data-page="resume" data-title="Resume" data-root="">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" id="site-header"></header>
+
+  <main id="main" class="container">
+    <div class="resume-head">
+      <div>
+        <h1 data-render="name"></h1>
+        <p class="resume-tagline" data-render="tagline"></p>
+        <ul class="contact-list" data-render="contact-list"></ul>
+      </div>
+      <!-- Opens the print dialog, where you can pick "Save as PDF". -->
+      <button type="button" class="button no-print" data-action="print">Save as PDF</button>
+    </div>
+
+    <section class="section split">
+      <h2>Experience</h2>
+      <ol class="timeline" data-render="experience"></ol>
+    </section>
+
+    <section class="section split">
+      <h2>Education</h2>
+      <ol class="timeline" data-render="education"></ol>
+    </section>
+
+    <section class="section split">
+      <h2>Skills</h2>
+      <div class="skill-groups" data-render="skills"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>

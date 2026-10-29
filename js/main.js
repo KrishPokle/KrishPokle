@@ -1,0 +1,288 @@
+/* ==========================================================
+   main.js
+   Builds the parts every page shares (header and footer) and
+   fills in each page with the info from content.js.
+
+   How it works: the HTML pages contain empty "slots" like
+       <ul data-render="projects"></ul>
+   This file finds every slot and fills it with HTML built from
+   SITE (defined in content.js). You shouldn't need to edit this
+   file to change your info. Edit content.js instead.
+   ========================================================== */
+
+(() => {
+  const html = document.documentElement;
+  const body = document.body;
+  const page = body.dataset.page || ""; // which nav link to highlight
+  const root = body.dataset.root || ""; // "../" on pages inside /blog
+
+  /* ---------- Helpers ---------- */
+
+  // Make text safe to put inside HTML, so a "<" shows up as a
+  // character instead of starting a tag.
+  const esc = (value) =>
+    String(value ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;");
+
+  // Paths in content.js are written from the site's top folder.
+  // This adds "../" when we're on a page one folder down.
+  // Full URLs ("https://...", "mailto:...") are left alone.
+  const url = (path) => (/^([a-z]+:|#|\/)/i.test(path) ? path : root + path);
+
+  // "2026-10-29" -> "29 Oct 2026"
+  const formatDate = (iso) =>
+    new Date(iso + "T00:00:00").toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+
+  // Newest posts first.
+  const sortedPosts = () => [...SITE.posts].sort((a, b) => b.date.localeCompare(a.date));
+
+  // Your social links plus email, skipping any left blank.
+  const contactLinks = () => {
+    const links = SITE.socials.filter((link) => link.url);
+    if (SITE.email) {
+      links.push({ label: "Email", url: `mailto:${SITE.email}`, handle: SITE.email });
+    }
+    return links;
+  };
+
+  const initials = () =>
+    SITE.name
+      .split(/\s+/)
+      .map((word) => word[0])
+      .join("")
+      .slice(0, 2)
+      .toUpperCase();
+
+  /* ---------- What goes in each slot ----------
+     Each key matches a data-render="..." value in the HTML. */
+
+  const render = {
+    name: () => esc(SITE.name),
+    tagline: () => esc(SITE.tagline),
+
+    // "krish@web" for the Terminal theme's prompt line.
+    "prompt-user": () => esc(SITE.name.split(" ")[0].toLowerCase()) + "@web",
+
+    pills: () =>
+      contactLinks()
+        .map((link) => `<li><a class="pill" href="${esc(url(link.url))}">${esc(link.label)}</a></li>`)
+        .join(""),
+
+    // About paragraphs may contain HTML on purpose (links, bold),
+    // so they are not escaped.
+    about: () => SITE.about.map((paragraph) => `<p>${paragraph}</p>`).join(""),
+
+    projects: () =>
+      SITE.projects
+        .map((project) => {
+          const title = project.url
+            ? `<a href="${esc(url(project.url))}">${esc(project.title)}</a>`
+            : esc(project.title);
+          const tags = (project.tags || []).map((tag) => `<li class="tag">${esc(tag)}</li>`).join("");
+          const links = (project.links || [])
+            .map((link) => `<a href="${esc(url(link.url))}">${esc(link.label)}</a>`)
+            .join("");
+          return `
+            <li class="project">
+              <p class="project-year">${esc(project.year)}</p>
+              <div>
+                <h3>${title}</h3>
+                <p class="project-desc">${esc(project.description)}</p>
+                ${tags ? `<ul class="tags" aria-label="Built with">${tags}</ul>` : ""}
+                ${links ? `<p class="project-links">${links}</p>` : ""}
+              </div>
+            </li>`;
+        })
+        .join(""),
+
+    // <ul data-render="posts" data-limit="3"> shows the 3 newest.
+    posts: (slot) => {
+      const limit = Number(slot.dataset.limit) || Infinity;
+      const heading = slot.dataset.heading || "h3";
+      const posts = sortedPosts().slice(0, limit);
+      if (!posts.length) return `<li class="empty">No posts yet. Check back soon.</li>`;
+      return posts
+        .map(
+          (post) => `
+            <li class="post-item">
+              <time datetime="${esc(post.date)}">${formatDate(post.date)}</time>
+              <div>
+                <${heading}><a href="${esc(url(`blog/${post.slug}.html`))}">${esc(post.title)}</a></${heading}>
+                <p>${esc(post.summary)}</p>
+              </div>
+            </li>`
+        )
+        .join("");
+    },
+
+    "contact-note": () => esc(SITE.contactNote),
+
+    "email-button": () =>
+      SITE.email ? `<a class="button" href="mailto:${esc(SITE.email)}">Email ${esc(SITE.email)}</a>` : "",
+
+    // The contact line at the top of the resume.
+    "contact-list": () => {
+      const items = SITE.location ? [`<li>${esc(SITE.location)}</li>`] : [];
+      contactLinks().forEach((link) => {
+        items.push(`<li><a href="${esc(url(link.url))}">${esc(link.handle || link.label)}</a></li>`);
+      });
+      return items.join("");
+    },
+
+    experience: () =>
+      SITE.experience
+        .map(
+          (job) => `
+            <li class="timeline-item">
+              <p class="timeline-when">${esc(job.start)} – ${esc(job.end)}</p>
+              <div>
+                <h3>${esc(job.role)}</h3>
+                <p class="timeline-org">${esc(job.org)}</p>
+                <ul>${job.points.map((point) => `<li>${esc(point)}</li>`).join("")}</ul>
+              </div>
+            </li>`
+        )
+        .join(""),
+
+    education: () =>
+      SITE.education
+        .map(
+          (school) => `
+            <li class="timeline-item">
+              <p class="timeline-when">${esc(school.start)} – ${esc(school.end)}</p>
+              <div>
+                <h3>${esc(school.degree)}</h3>
+                <p class="timeline-org">${esc(school.school)}</p>
+                ${school.note ? `<p>${esc(school.note)}</p>` : ""}
+              </div>
+            </li>`
+        )
+        .join(""),
+
+    skills: () =>
+      SITE.skills
+        .map(
+          (group) => `
+            <div class="skill-group">
+              <h3>${esc(group.group)}</h3>
+              <ul class="tags">${group.items.map((skill) => `<li class="tag">${esc(skill)}</li>`).join("")}</ul>
+            </div>`
+        )
+        .join(""),
+
+    avatar: () => (SITE.photo ? `<img src="${esc(url(SITE.photo))}" alt="">` : esc(initials())),
+
+    // The big buttons on links.html: your contact links, then
+    // shortcuts to the rest of the site.
+    "link-buttons": () => {
+      const latest = sortedPosts()[0];
+      const links = [
+        ...contactLinks(),
+        { label: "Projects", url: "index.html#projects", handle: "Things I've built" },
+        { label: "Resume", url: "resume.html", handle: "Experience and skills" },
+        { label: "Blog", url: "blog/index.html", handle: latest ? `Latest: ${latest.title}` : "" },
+      ];
+      return links
+        .map(
+          (link) => `
+            <li>
+              <a class="link-button" href="${esc(url(link.url))}">
+                <span class="link-label">${esc(link.label)}</span>
+                <span class="handle">${esc(link.handle || "")}</span>
+              </a>
+            </li>`
+        )
+        .join("");
+    },
+  };
+
+  /* ---------- Header and footer ---------- */
+
+  const NAV = [
+    { id: "projects", label: "Projects", path: "index.html#projects" },
+    { id: "resume", label: "Resume", path: "resume.html" },
+    { id: "blog", label: "Blog", path: "blog/index.html" },
+    { id: "links", label: "Links", path: "links.html" },
+  ];
+
+  const THEME_NAMES = { paper: "Paper", terminal: "Terminal", pop: "Pop" };
+
+  const current = (id) => (id === page ? ' aria-current="page"' : "");
+
+  const header = document.getElementById("site-header");
+  if (header) {
+    const navLinks = NAV.map(
+      (item) => `<li><a href="${url(item.path)}"${current(item.id)}>${item.label}</a></li>`
+    ).join("");
+
+    const themeButtons = window.THEMES.map(
+      (name) => `
+        <button type="button" data-theme-choice="${name}" aria-pressed="false">
+          <span class="swatch swatch-${name}" aria-hidden="true"></span>
+          <span class="theme-name">${THEME_NAMES[name]}</span>
+        </button>`
+    ).join("");
+
+    header.innerHTML = `
+      <div class="container header-inner">
+        <a class="brand" href="${url("index.html")}"${current("home")}>${esc(SITE.name)}</a>
+        <nav class="site-nav" aria-label="Main"><ul>${navLinks}</ul></nav>
+        <div class="theme-switch" role="group" aria-label="Theme">${themeButtons}</div>
+      </div>`;
+  }
+
+  const footer = document.getElementById("site-footer");
+  if (footer) {
+    footer.innerHTML = `
+      <div class="container footer-inner">
+        <p>© ${new Date().getFullYear()} ${esc(SITE.name)}</p>
+        <p>Made by hand with HTML, CSS and JavaScript.</p>
+      </div>`;
+  }
+
+  /* ---------- Fill every slot on the page ---------- */
+
+  document.querySelectorAll("[data-render]").forEach((slot) => {
+    const fill = render[slot.dataset.render];
+    if (fill) slot.innerHTML = fill(slot);
+  });
+
+  // <body data-title="Resume"> becomes "Resume | Krish Pokle".
+  document.title = body.dataset.title ? `${body.dataset.title} | ${SITE.name}` : SITE.name;
+
+  /* ---------- Theme switcher ---------- */
+
+  const syncThemeButtons = () => {
+    document.querySelectorAll("[data-theme-choice]").forEach((button) => {
+      button.setAttribute("aria-pressed", String(button.dataset.themeChoice === html.dataset.theme));
+    });
+  };
+  syncThemeButtons();
+
+  document.addEventListener("click", (event) => {
+    const choice = event.target.closest("[data-theme-choice]");
+    if (choice) {
+      window.setTheme(choice.dataset.themeChoice);
+      syncThemeButtons();
+    }
+    if (event.target.closest('[data-action="print"]')) window.print();
+  });
+
+  // Always print in the Paper theme (black text on white reads
+  // best on paper), then switch back afterwards.
+  let themeBeforePrint;
+  window.addEventListener("beforeprint", () => {
+    themeBeforePrint = html.dataset.theme;
+    html.dataset.theme = "paper";
+  });
+  window.addEventListener("afterprint", () => {
+    html.dataset.theme = themeBeforePrint;
+  });
+})();

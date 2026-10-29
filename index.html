@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Krish Pokle</title>
+  <meta name="description" content="Krish Pokle's personal website: projects, resume and writing.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Fonts for all three themes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&family=Schibsted+Grotesk:wght@400..900&display=swap">
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/theme.js"></script>
+  <script src="js/content.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+
+<!-- data-page highlights the right nav link.
+     data-root is the path back to the top folder ("" here, "../" in /blog). -->
+<body data-page="home" data-root="">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header" id="site-header"></header>
+
+  <main id="main">
+    <!-- Empty elements with data-render="..." get filled in by js/main.js,
+         using your info from js/content.js. -->
+
+    <section class="hero container">
+      <p class="hero-prompt" aria-hidden="true"><span class="prompt-user" data-render="prompt-user"></span>:~$ <span class="prompt-cmd">whoami</span><span class="caret"></span></p>
+      <h1 class="hero-name" data-render="name"></h1>
+      <p class="hero-tagline" data-render="tagline"></p>
+      <ul class="pill-row" data-render="pills"></ul>
+    </section>
+
+    <section class="section container split" id="about">
+      <h2>About</h2>
+      <div class="prose" data-render="about"></div>
+    </section>
+
+    <section class="section container split" id="projects">
+      <h2>Projects</h2>
+      <ul class="projects" data-render="projects"></ul>
+    </section>
+
+    <section class="section container split" id="writing">
+      <div class="section-aside">
+        <h2>Writing</h2>
+        <a href="blog/index.html">All posts</a>
+      </div>
+      <ul class="post-list" data-render="posts" data-limit="3"></ul>
+    </section>
+
+    <section class="section container split" id="contact">
+      <h2>Contact</h2>
+      <div class="prose">
+        <p data-render="contact-note"></p>
+        <p data-render="email-button"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer"></footer>
+</body>
+</html>
