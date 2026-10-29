@@ -212,7 +212,7 @@
     { id: "links", label: "Links", path: "links.html" },
   ];
 
-  const THEME_NAMES = { paper: "Paper", terminal: "Terminal", pop: "Pop" };
+  const THEME_NAMES = { lavender: "Lavender", paper: "Paper", terminal: "Terminal", pop: "Pop" };
 
   const current = (id) => (id === page ? ' aria-current="page"' : "");
 
@@ -224,7 +224,7 @@
 
     const themeButtons = window.THEMES.map(
       (name) => `
-        <button type="button" data-theme-choice="${name}" aria-pressed="false">
+        <button type="button" data-theme-choice="${name}" aria-pressed="false" title="${THEME_NAMES[name]}">
           <span class="swatch swatch-${name}" aria-hidden="true"></span>
           <span class="theme-name">${THEME_NAMES[name]}</span>
         </button>`

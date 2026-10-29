@@ -23,8 +23,31 @@
   --label-col: 12rem;  /* left column for section headings */
 }
 
-/* Paper: clean and minimal. The default. */
+/* Lavender: soft and calm. The default. */
 :root,
+[data-theme="lavender"] {
+  color-scheme: light;
+  --bg: #F5F1FB;
+  --surface: #EAE2F6;
+  --ink: #2B2140;
+  --muted: #645879;
+  --line: #DACFEB;
+  --accent: #7A58C1;
+  --accent-deep: #4A2E85;
+  --on-accent: #FFFFFF;
+  --link: #6744B0;
+  --focus: #6744B0;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Figtree", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 600;
+  --display-tracking: -0.025em;
+  --radius: 14px;
+  --border-width: 1px;
+  --shadow: none;
+}
+
+/* Paper: clean and minimal. */
 [data-theme="paper"] {
   color-scheme: light;
   --bg: #F9FAFB;
@@ -357,6 +380,7 @@ img {
   box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.2);
 }
 
+.swatch-lavender { background: linear-gradient(135deg, #F5F1FB 50%, #7A58C1 50%); }
 .swatch-paper    { background: linear-gradient(135deg, #F9FAFB 50%, #2740D9 50%); }
 .swatch-terminal { background: linear-gradient(135deg, #12142A 50%, #FFB547 50%); }
 .swatch-pop      { background: linear-gradient(135deg, #FF4F8B 50%, #FFD43B 50%); }
@@ -776,6 +800,38 @@ img {
 
 /* ---------- 5. Theme extras ---------- */
 
+/* Lavender: Fraunces with its "soft" axis turned all the way up,
+   so the serif headings get rounded, gentle edges. */
+[data-theme="lavender"] :is(h1, h2, h3, .brand, .avatar) {
+  font-variation-settings: "SOFT" 100;
+}
+
+[data-theme="lavender"] .hero-name {
+  color: var(--accent-deep);
+  letter-spacing: -0.035em;
+}
+
+[data-theme="lavender"] .tag {
+  color: var(--accent-deep);
+}
+
+[data-theme="lavender"] .pill {
+  background: var(--surface);
+  border-color: var(--surface);
+}
+
+[data-theme="lavender"] .pill:hover {
+  border-color: var(--accent);
+}
+
+[data-theme="lavender"] .link-button {
+  border-color: var(--surface);
+}
+
+[data-theme="lavender"] .link-button:hover {
+  border-color: var(--accent);
+}
+
 /* Paper: let the hero name dominate; everything else stays quiet. */
 [data-theme="paper"] .hero-name {
   font-weight: 800;
@@ -1003,9 +1059,9 @@ img {
   }
 }
 
-/* On narrow phones, theme buttons show just their swatches.
-   The names stay readable by screen readers. */
-@media (max-width: 26rem) {
+/* Below laptop width, theme buttons show just their swatches
+   so the header fits. The names stay readable by screen readers. */
+@media (max-width: 56rem) {
   .theme-name {
     position: absolute;
     width: 1px;
