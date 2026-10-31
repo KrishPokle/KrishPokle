@@ -145,7 +145,9 @@ const SITE = {
   // stage; in the Pokémon theme it "evolves" as you scroll to it.
   // The resume shows every course in one list.
   //   stage     evolution name shown in the Pokémon theme
-  //   art       which drawing: "egg", "small", "medium" or "large"
+  //   art       which drawing: "egg", "small", "medium" or "large".
+  //             An "egg" stage cracks as you scroll and hatches instead
+  //             of evolving.
   //   image     optional picture to use instead of the drawing, e.g.
   //             "assets/evolution/charmander.png". Use a PNG with a
   //             transparent background so the silhouette effect works.
@@ -161,7 +163,7 @@ const SITE = {
       year: "Freshman year",
       stage: "Egg",
       art: "egg",
-      image: "",
+      image: "assets/evolution/egg.png",
       courses: [],
     },
     {

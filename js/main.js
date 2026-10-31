@@ -113,6 +113,23 @@
     large: WING + `<g transform="matrix(-1 0 0 1 100 0)">${WING}</g>` + halo(50, 52, 0.78) + flame(50, 60, 0.54),
   };
 
+  // The egg is drawn twice, as a top and bottom half cut along the
+  // same zigzag as the crack (see .egg-top / .egg-bottom in the CSS),
+  // so the top of the shell can pop off when it hatches. The crack
+  // lines are drawn over it and grow as you scroll.
+  const eggArt = (picture) => `
+    <div class="egg">
+      <div class="egg-half egg-bottom">${picture}</div>
+      <div class="egg-half egg-top">${picture}</div>
+      <svg class="egg-crack" viewBox="0 0 100 100">
+        <path class="crack-main" pathLength="1" d="M50 48 L44 56 L36 46 L28 55 L20 46 L14 51"/>
+        <path class="crack-main" pathLength="1" d="M50 48 L57 57 L65 46 L73 55 L81 47 L86 52"/>
+        <path class="crack-branch" pathLength="1" d="M36 46 L33 38"/>
+        <path class="crack-branch" pathLength="1" d="M65 46 L68 38 L66 33"/>
+        <path class="crack-branch" pathLength="1" d="M57 57 L60 65"/>
+      </svg>
+    </div>`;
+
   const initials = () =>
     SITE.name
       .split(/\s+/)
@@ -258,11 +275,14 @@
               ? `<p class="course-upcoming">Courses to come.</p>`
               : "";
           // Your own picture if you set one, otherwise the built-in drawing.
-          const art = stage.image
+          const picture = stage.image
             ? `<img src="${esc(url(stage.image))}" alt="" loading="lazy">`
             : `<svg viewBox="0 0 100 100">${EVOLUTION_ART[stage.art] || ""}</svg>`;
+          const isEgg = stage.art === "egg";
+          const art = isEgg ? eggArt(picture) : picture;
+          const classes = ["evo-stage", stage.upcoming && "is-upcoming", isEgg && "is-egg"].filter(Boolean);
           return `
-            <li class="evo-stage${stage.upcoming ? " is-upcoming" : ""}">
+            <li class="${classes.join(" ")}">
               <div class="evo-art" aria-hidden="true">${art}</div>
               <div class="evo-head">
                 <h3 class="evo-year">${esc(stage.year)}</h3>
@@ -362,7 +382,7 @@
      view: adding .is-evolved makes the CSS play the animation once.
      Upcoming years stay as silhouettes. */
 
-  const stages = document.querySelectorAll(".evo-stage:not(.is-upcoming)");
+  const stages = document.querySelectorAll(".evo-stage:not(.is-upcoming):not(.is-egg)");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduceMotion || !("IntersectionObserver" in window)) {
     stages.forEach((stage) => stage.classList.add("is-evolved"));
@@ -378,6 +398,42 @@
       { threshold: 0.6 }
     );
     stages.forEach((stage) => observer.observe(stage));
+  }
+
+  /* ---------- The egg cracks as you scroll (Pokémon theme) ----------
+     --crack goes from 0 to 1 as the egg's card moves from the bottom
+     of the screen to the middle. The CSS uses it to draw the crack,
+     the egg rocks as it cracks, and at 1 the top of the shell pops
+     off. Scrolling back up closes it again. */
+
+  const eggs = document.querySelectorAll(".evo-stage.is-egg");
+  const updateEggs = () => {
+    const screen = window.innerHeight;
+    eggs.forEach((egg) => {
+      const top = egg.getBoundingClientRect().top;
+      const progress = Math.min(1, Math.max(0, (screen * 0.95 - top) / (screen * 0.4)));
+      const hatched = progress >= 0.98;
+      const wobble = hatched ? 0 : Math.sin(progress * 30) * 7 * progress;
+      egg.style.setProperty("--crack", progress.toFixed(3));
+      egg.style.setProperty("--wobble", `${wobble.toFixed(2)}deg`);
+      egg.classList.toggle("is-hatched", hatched);
+    });
+  };
+
+  if (eggs.length) {
+    // Update at most once per frame, however fast the scroll events come.
+    let queued = false;
+    const queueUpdate = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        updateEggs();
+        queued = false;
+      });
+    };
+    window.addEventListener("scroll", queueUpdate, { passive: true });
+    window.addEventListener("resize", queueUpdate);
+    updateEggs();
   }
 
   // <body data-title="Resume"> becomes "Resume | Krish Pokle".

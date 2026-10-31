@@ -1173,7 +1173,7 @@ img {
   background: radial-gradient(circle at 50% 55%, #FFFFFF 0 30%, #D6E6F6 75%);
 }
 
-[data-theme="pokemon"] .evo-art :is(svg, img) {
+[data-theme="pokemon"] .evo-art > :is(svg, img) {
   position: relative;
   z-index: 1;
   width: 82%;
@@ -1206,17 +1206,105 @@ img {
    Pokémon?" silhouette. When main.js adds .is-evolved, it flashes
    white over a dark screen and then appears in color, like the
    games' evolution scene. Upcoming years stay silhouettes. */
-[data-theme="pokemon"] .evo-stage:not(.is-evolved) .evo-art :is(svg, img) {
+[data-theme="pokemon"] .evo-stage:not(.is-evolved) .evo-art > :is(svg, img) {
   filter: brightness(0);
   opacity: 0.85;
 }
 
-[data-theme="pokemon"] .is-evolved .evo-art :is(svg, img) {
+[data-theme="pokemon"] .is-evolved .evo-art > :is(svg, img) {
   animation: evolve 1.4s ease-out;
 }
 
 [data-theme="pokemon"] .is-evolved .evo-art::after {
   animation: evolve-screen 1.4s ease-out;
+}
+
+/* The egg doesn't evolve; it cracks as you scroll (main.js sets
+   --crack from 0 to 1 and --wobble in degrees). */
+[data-theme="pokemon"] .egg {
+  position: relative;
+  z-index: 1;
+  width: 82%;
+  aspect-ratio: 1;
+  transform: rotate(var(--wobble, 0deg));
+  transform-origin: 50% 90%;
+}
+
+[data-theme="pokemon"] .egg-half,
+[data-theme="pokemon"] .egg-crack {
+  position: absolute;
+  inset: 0;
+}
+
+[data-theme="pokemon"] .egg-half > :is(img, svg) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Two copies of the egg. The top one is cut along the crack's
+   zigzag and sits exactly over the whole egg underneath, so there's
+   no visible seam. On hatching, the bottom copy is cut to match and
+   the top swings open like a lid, hinged at the left end of the crack. */
+[data-theme="pokemon"] .egg-top {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 52%, 86% 52%, 81% 47%, 73% 55%, 65% 46%, 57% 57%, 50% 48%, 44% 56%, 36% 46%, 28% 55%, 20% 46%, 14% 51%, 0% 51%);
+  transform-origin: 14% 51%;
+  transition: transform 0.45s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+[data-theme="pokemon"] .is-hatched .egg-bottom {
+  clip-path: polygon(0% 51%, 14% 51%, 20% 46%, 28% 55%, 36% 46%, 44% 56%, 50% 48%, 57% 57%, 65% 46%, 73% 55%, 81% 47%, 86% 52%, 100% 52%, 100% 100%, 0% 100%);
+}
+
+/* Let the lid poke out of the screen frame when it pops off. */
+[data-theme="pokemon"] .is-egg .evo-art {
+  overflow: visible;
+}
+
+/* The crack lines. pathLength="1" lets a dash offset of 1 hide a
+   line completely and 0 show all of it. The main crack is fully
+   drawn by --crack 0.6; the small branches grow from 0.55 to 0.95. */
+[data-theme="pokemon"] .egg-crack path {
+  fill: none;
+  stroke: #4A3B22;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+}
+
+[data-theme="pokemon"] .crack-main {
+  stroke-dashoffset: calc(1 - clamp(0, var(--crack, 0) / 0.6, 1));
+}
+
+[data-theme="pokemon"] .crack-branch {
+  stroke-dashoffset: calc(1 - clamp(0, (var(--crack, 0) - 0.55) / 0.4, 1));
+}
+
+/* A burst of light behind the egg when it hatches. */
+[data-theme="pokemon"] .egg::before {
+  content: "";
+  position: absolute;
+  inset: 10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFFBE6 0 20%, #FFD23F 50%, transparent 70%);
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+[data-theme="pokemon"] .is-hatched .egg::before {
+  opacity: 1;
+  transform: scale(1.35);
+}
+
+[data-theme="pokemon"] .is-hatched .egg-top {
+  transform: translate(-6%, -14%) rotate(-22deg);
+}
+
+[data-theme="pokemon"] .is-hatched .egg-crack {
+  opacity: 0;
 }
 
 @keyframes evolve {
