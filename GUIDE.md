@@ -40,10 +40,11 @@ Open `js/content.js`. Your name, bio, links, projects, resume and blog list are 
 It's filled in from your resume. A few things you might still want to do:
 
 - [ ] Add a `year` (and `dates`) for the solar-powered RC car
+- [ ] Add course numbers (`code`) and notes to your `coursework`
 - [ ] Add a photo (see below)
 - [ ] Write more blog posts
 
-**The resume page** reads `education`, `leadership`, `experience` and `skills`, plus any project that has `points` (bullet points). Projects without `points` only show on the home page. Your phone number is left off on purpose, since public pages get scraped by spam bots.
+**The resume page** reads `education`, `coursework`, `leadership`, `experience` and `skills`, plus any project that has `points` (bullet points). Coursework also has its own section on the home page. Projects without `points` only show on the home page. Your phone number is left off on purpose, since public pages get scraped by spam bots.
 
 **Adding a photo:** put it in `assets/` (e.g. `assets/me.jpg`), then set `photo: "assets/me.jpg"` in `content.js`. It replaces the initials circle on the links page.
 

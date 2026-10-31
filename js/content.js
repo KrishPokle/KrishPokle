@@ -129,7 +129,17 @@ const SITE = {
     { group: "Languages", items: ["C", "Python", "C++", "Java", "TypeScript"] },
     { group: "Hardware", items: ["KiCad", "Fusion 360", "Soldering", "3D printing"] },
     { group: "Software & tools", items: ["Next.js", "Supabase", "Stripe", "Vercel", "Git"] },
-    { group: "Coursework", items: ["Circuits", "Signals & Systems", "Electronics", "Digital System Design", "Microcontrollers"] },
+  ],
+
+  // Classes you've taken, shown on the home page and resume.
+  //   code   optional course number, e.g. "ECEN 214"
+  //   note   optional one-liner: a lab, a project, what you learned
+  coursework: [
+    { name: "Circuits", code: "", note: "" },
+    { name: "Signals & Systems", code: "", note: "" },
+    { name: "Electronics", code: "", note: "" },
+    { name: "Digital System Design", code: "", note: "" },
+    { name: "Microcontrollers", code: "", note: "" },
   ],
 
   // ---------- Blog ----------

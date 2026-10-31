@@ -189,6 +189,18 @@
         )
         .join(""),
 
+    coursework: () =>
+      (SITE.coursework || [])
+        .map(
+          (course) => `
+            <li class="course">
+              ${course.code ? `<p class="course-code">${esc(course.code)}</p>` : ""}
+              <h3>${esc(course.name)}</h3>
+              ${course.note ? `<p class="course-note">${esc(course.note)}</p>` : ""}
+            </li>`
+        )
+        .join(""),
+
     avatar: () => (SITE.photo ? `<img src="${esc(url(SITE.photo))}" alt="">` : esc(initials())),
 
     // The big buttons on links.html: your contact links, then

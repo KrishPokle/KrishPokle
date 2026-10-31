@@ -544,6 +544,40 @@ img {
   color: var(--muted);
 }
 
+/* Coursework (home and resume) */
+
+.courses {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13rem, 1fr));
+  gap: 0 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.course {
+  padding-block: 0.85rem 1rem;
+  border-top: var(--border-width) solid var(--line);
+}
+
+.course h3 {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.course-code {
+  margin: 0 0 0.15rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.course-note {
+  margin: 0.3rem 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
 /* Resume */
 
 .resume-head {
@@ -899,6 +933,7 @@ img {
 [data-theme="terminal"] .timeline-when,
 [data-theme="terminal"] .post-item time,
 [data-theme="terminal"] .post-date,
+[data-theme="terminal"] .course-code,
 [data-theme="terminal"] .site-footer {
   font-family: var(--font-mono);
 }
@@ -988,6 +1023,26 @@ img {
 [data-theme="pop"] .project:nth-child(3n + 1) { background: var(--tint-1); }
 [data-theme="pop"] .project:nth-child(3n + 2) { background: var(--tint-2); }
 [data-theme="pop"] .project:nth-child(3n + 3) { background: var(--tint-3); }
+
+[data-theme="pop"] .courses {
+  gap: 1rem;
+}
+
+[data-theme="pop"] .course {
+  padding: 0.85rem 1.1rem 1rem;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+[data-theme="pop"] .course:nth-child(3n + 1) { background: var(--tint-1); }
+[data-theme="pop"] .course:nth-child(3n + 2) { background: var(--tint-2); }
+[data-theme="pop"] .course:nth-child(3n + 3) { background: var(--tint-3); }
+
+[data-theme="pop"] .course-code,
+[data-theme="pop"] .course-note {
+  color: var(--ink);
+}
 
 [data-theme="pop"] .project-desc,
 [data-theme="pop"] .project-year {
@@ -1128,7 +1183,8 @@ img {
   }
 
   .timeline-item,
-  .skill-group {
+  .skill-group,
+  .course {
     break-inside: avoid;
   }
 }
