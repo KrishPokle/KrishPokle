@@ -52,6 +52,24 @@
     return links;
   };
 
+  // One entry on the resume: dates on the left, details on the right.
+  const timelineItem = ({ dates, title, subtitle, note, points = [] }) => `
+    <li class="timeline-item">
+      <p class="timeline-when">${esc(dates)}</p>
+      <div>
+        <h3>${esc(title)}</h3>
+        ${subtitle ? `<p class="timeline-org">${esc(subtitle)}</p>` : ""}
+        ${note ? `<p class="timeline-note">${esc(note)}</p>` : ""}
+        ${points.length ? `<ul>${points.map((point) => `<li>${esc(point)}</li>`).join("")}</ul>` : ""}
+      </div>
+    </li>`;
+
+  // Jobs and leadership roles share the same shape.
+  const roles = (list = []) =>
+    list
+      .map((role) => timelineItem({ dates: role.dates, title: role.role, subtitle: role.org, points: role.points }))
+      .join("");
+
   const initials = () =>
     SITE.name
       .split(/\s+/)
@@ -136,33 +154,27 @@
       return items.join("");
     },
 
-    experience: () =>
-      SITE.experience
-        .map(
-          (job) => `
-            <li class="timeline-item">
-              <p class="timeline-when">${esc(job.start)} – ${esc(job.end)}</p>
-              <div>
-                <h3>${esc(job.role)}</h3>
-                <p class="timeline-org">${esc(job.org)}</p>
-                <ul>${job.points.map((point) => `<li>${esc(point)}</li>`).join("")}</ul>
-              </div>
-            </li>`
-        )
-        .join(""),
+    experience: () => roles(SITE.experience),
+    leadership: () => roles(SITE.leadership),
 
     education: () =>
       SITE.education
-        .map(
-          (school) => `
-            <li class="timeline-item">
-              <p class="timeline-when">${esc(school.start)} – ${esc(school.end)}</p>
-              <div>
-                <h3>${esc(school.degree)}</h3>
-                <p class="timeline-org">${esc(school.school)}</p>
-                ${school.note ? `<p>${esc(school.note)}</p>` : ""}
-              </div>
-            </li>`
+        .map((school) =>
+          timelineItem({ dates: school.dates, title: school.degree, subtitle: school.school, note: school.note })
+        )
+        .join(""),
+
+    // Projects on the resume: only the ones with bullet points.
+    "resume-projects": () =>
+      SITE.projects
+        .filter((project) => project.points?.length)
+        .map((project) =>
+          timelineItem({
+            dates: project.dates || project.year,
+            title: project.title,
+            subtitle: project.role,
+            points: project.points,
+          })
         )
         .join(""),
 

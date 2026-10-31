@@ -37,12 +37,13 @@ assets/               Images (favicon, your photo)
 
 Open `js/content.js`. Your name, bio, links, projects, resume and blog list are all in there, and every page updates from it.
 
-Anything that says "your ..." or `example.com` is a placeholder. Replace those before you publish:
+It's filled in from your resume. A few things you might still want to do:
 
-- [ ] `tagline`, `location` and `email`
-- [ ] Your LinkedIn link (or set its `url` to `""` to hide it)
-- [ ] The `about` paragraphs
-- [ ] `projects`, `experience`, `education` and `skills`
+- [ ] Add a `year` (and `dates`) for the solar-powered RC car
+- [ ] Add a photo (see below)
+- [ ] Write more blog posts
+
+**The resume page** reads `education`, `leadership`, `experience` and `skills`, plus any project that has `points` (bullet points). Projects without `points` only show on the home page. Your phone number is left off on purpose, since public pages get scraped by spam bots.
 
 **Adding a photo:** put it in `assets/` (e.g. `assets/me.jpg`), then set `photo: "assets/me.jpg"` in `content.js`. It replaces the initials circle on the links page.
 
