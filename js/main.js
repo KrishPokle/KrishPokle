@@ -257,11 +257,13 @@
             : stage.upcoming
               ? `<p class="course-upcoming">Courses to come.</p>`
               : "";
+          // Your own picture if you set one, otherwise the built-in drawing.
+          const art = stage.image
+            ? `<img src="${esc(url(stage.image))}" alt="" loading="lazy">`
+            : `<svg viewBox="0 0 100 100">${EVOLUTION_ART[stage.art] || ""}</svg>`;
           return `
             <li class="evo-stage${stage.upcoming ? " is-upcoming" : ""}">
-              <div class="evo-art" aria-hidden="true">
-                <svg viewBox="0 0 100 100">${EVOLUTION_ART[stage.art] || ""}</svg>
-              </div>
+              <div class="evo-art" aria-hidden="true">${art}</div>
               <div class="evo-head">
                 <h3 class="evo-year">${esc(stage.year)}</h3>
                 <p class="evo-name">${esc(stage.stage)}</p>

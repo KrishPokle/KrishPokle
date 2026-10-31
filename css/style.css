@@ -1173,11 +1173,12 @@ img {
   background: radial-gradient(circle at 50% 55%, #FFFFFF 0 30%, #D6E6F6 75%);
 }
 
-[data-theme="pokemon"] .evo-art svg {
+[data-theme="pokemon"] .evo-art :is(svg, img) {
   position: relative;
   z-index: 1;
   width: 82%;
   height: 82%;
+  object-fit: contain;
 }
 
 /* A dark backdrop that only shows during the evolution flash. */
@@ -1205,12 +1206,12 @@ img {
    Pokémon?" silhouette. When main.js adds .is-evolved, it flashes
    white over a dark screen and then appears in color, like the
    games' evolution scene. Upcoming years stay silhouettes. */
-[data-theme="pokemon"] .evo-stage:not(.is-evolved) .evo-art svg {
+[data-theme="pokemon"] .evo-stage:not(.is-evolved) .evo-art :is(svg, img) {
   filter: brightness(0);
   opacity: 0.85;
 }
 
-[data-theme="pokemon"] .is-evolved .evo-art svg {
+[data-theme="pokemon"] .is-evolved .evo-art :is(svg, img) {
   animation: evolve 1.4s ease-out;
 }
 

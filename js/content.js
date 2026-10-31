@@ -146,6 +146,9 @@ const SITE = {
   // The resume shows every course in one list.
   //   stage     evolution name shown in the Pokémon theme
   //   art       which drawing: "egg", "small", "medium" or "large"
+  //   image     optional picture to use instead of the drawing, e.g.
+  //             "assets/evolution/charmander.png". Use a PNG with a
+  //             transparent background so the silhouette effect works.
   //   upcoming  true for a year you haven't started yet (shown as a
   //             silhouette until you add courses and remove this)
   //   courses   each needs a name; "code" and "note" are optional:
@@ -158,24 +161,28 @@ const SITE = {
       year: "Freshman year",
       stage: "Egg",
       art: "egg",
+      image: "",
       courses: [],
     },
     {
       year: "Sophomore year",
       stage: "Charmander",
       art: "small",
+      image: "",
       courses: [{ name: "Circuits" }, { name: "Digital System Design" }],
     },
     {
       year: "Junior year",
       stage: "Charmeleon",
       art: "medium",
+      image: "",
       courses: [{ name: "Signals & Systems" }, { name: "Electronics" }, { name: "Microcontrollers" }],
     },
     {
       year: "Senior year",
       stage: "Charizard",
       art: "large",
+      image: "",
       upcoming: true,
       courses: [],
     },
