@@ -70,6 +70,49 @@
       .map((role) => timelineItem({ dates: role.dates, title: role.role, subtitle: role.org, points: role.points }))
       .join("");
 
+  // One <li> per course. "heading" is h3 or h4, depending on the page.
+  const courseItems = (courses, heading) =>
+    courses
+      .map(
+        (course) => `
+          <li class="course">
+            ${course.code ? `<p class="course-code">${esc(course.code)}</p>` : ""}
+            <${heading}>${esc(course.name)}</${heading}>
+            ${course.note ? `<p class="course-note">${esc(course.note)}</p>` : ""}
+          </li>`
+      )
+      .join("");
+
+  // Drawings for the coursework stages (Pokémon theme). They're
+  // original SVG shapes in a 100×100 box: an egg, then a flame that
+  // grows each year and finally gets wings.
+  const OUTLINE = 'stroke="#1D2333" stroke-width="3" stroke-linejoin="round" vector-effect="non-scaling-stroke"';
+  const FLAME_OUTER = "M50 6 C61 25 79 40 77 62 C75 81 63 93 50 93 C36 93 23 82 23 63 C23 47 32 40 38 27 C42 38 46 41 50 6 Z";
+  const FLAME_INNER = "M50 40 C57 52 65 60 64 72 C63 83 57 89 50 89 C42 89 36 83 36 73 C36 63 45 57 50 40 Z";
+  const flame = (x, y, size) => `
+    <g transform="translate(${x} ${y}) scale(${size}) translate(-50 -50)">
+      <path d="${FLAME_OUTER}" fill="#F0702C" ${OUTLINE}/>
+      <path d="${FLAME_INNER}" fill="#FFD23F"/>
+    </g>`;
+  const halo = (x, y, size) => `
+    <g transform="translate(${x} ${y}) scale(${size}) translate(-50 -50)">
+      <path d="${FLAME_OUTER}" fill="#D8342C" ${OUTLINE}/>
+    </g>`;
+  const WING = `
+    <path d="M42 58 C31 35 16 24 3 26 C9 34 10 43 7 51 C14 50 20 54 21 62 C27 57 34 58 40 64 Z" fill="#F0702C" ${OUTLINE}/>
+    <path d="M37 57 C29 41 19 33 11 32 C15 38 15 45 13 49 C19 49 23 53 24 58 C28 55 32 56 36 59 Z" fill="#2E9C9A"/>`;
+
+  const EVOLUTION_ART = {
+    egg: `
+      <path d="M50 8 C71 8 84 42 84 61 C84 81 69 93 50 93 C31 93 16 81 16 61 C16 42 29 8 50 8 Z" fill="#FFF4DA" ${OUTLINE}/>
+      <ellipse cx="37" cy="40" rx="7" ry="9" fill="#F0702C"/>
+      <ellipse cx="63" cy="58" rx="9" ry="7" fill="#F0702C"/>
+      <ellipse cx="40" cy="75" rx="5" ry="4" fill="#F0702C"/>`,
+    small: flame(50, 56, 0.62),
+    medium: halo(50, 52, 0.86) + flame(50, 60, 0.6),
+    large: WING + `<g transform="matrix(-1 0 0 1 100 0)">${WING}</g>` + halo(50, 52, 0.78) + flame(50, 60, 0.54),
+  };
+
   const initials = () =>
     SITE.name
       .split(/\s+/)
@@ -200,16 +243,32 @@
         )
         .join(""),
 
-    coursework: () =>
+    // Resume: every course from every year in one list.
+    coursework: () => courseItems((SITE.coursework || []).flatMap((stage) => stage.courses || []), "h3"),
+
+    // Home: one stage per year. The art and stage name only show in
+    // the Pokémon theme; other themes show a plain list by year.
+    evolution: () =>
       (SITE.coursework || [])
-        .map(
-          (course) => `
-            <li class="course">
-              ${course.code ? `<p class="course-code">${esc(course.code)}</p>` : ""}
-              <h3>${esc(course.name)}</h3>
-              ${course.note ? `<p class="course-note">${esc(course.note)}</p>` : ""}
-            </li>`
-        )
+        .map((stage) => {
+          const courses = stage.courses || [];
+          const list = courses.length
+            ? `<ul class="courses">${courseItems(courses, "h4")}</ul>`
+            : stage.upcoming
+              ? `<p class="course-upcoming">Courses to come.</p>`
+              : "";
+          return `
+            <li class="evo-stage${stage.upcoming ? " is-upcoming" : ""}">
+              <div class="evo-art" aria-hidden="true">
+                <svg viewBox="0 0 100 100">${EVOLUTION_ART[stage.art] || ""}</svg>
+              </div>
+              <div class="evo-head">
+                <h3 class="evo-year">${esc(stage.year)}</h3>
+                <p class="evo-name">${esc(stage.stage)}</p>
+              </div>
+              ${list}
+            </li>`;
+        })
         .join(""),
 
     avatar: () => (SITE.photo ? `<img src="${esc(url(SITE.photo))}" alt="">` : esc(initials())),
@@ -295,6 +354,29 @@
     const fill = render[slot.dataset.render];
     if (fill) slot.innerHTML = fill(slot);
   });
+
+  /* ---------- Evolve on scroll (Pokémon theme) ----------
+     Each coursework stage evolves the first time it scrolls into
+     view: adding .is-evolved makes the CSS play the animation once.
+     Upcoming years stay as silhouettes. */
+
+  const stages = document.querySelectorAll(".evo-stage:not(.is-upcoming)");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    stages.forEach((stage) => stage.classList.add("is-evolved"));
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-evolved");
+          observer.unobserve(entry.target);
+        });
+      },
+      { threshold: 0.6 }
+    );
+    stages.forEach((stage) => observer.observe(stage));
+  }
 
   // <body data-title="Resume"> becomes "Resume | Krish Pokle".
   document.title = body.dataset.title ? `${body.dataset.title} | ${SITE.name}` : SITE.name;

@@ -172,7 +172,8 @@ body {
 
 h1,
 h2,
-h3 {
+h3,
+h4 {
   margin: 0 0 0.5em;
   font-family: var(--font-display);
   font-weight: var(--display-weight);
@@ -591,7 +592,7 @@ img {
   border-top: var(--border-width) solid var(--line);
 }
 
-.course h3 {
+.course :is(h3, h4) {
   margin: 0;
   font-size: 1.125rem;
 }
@@ -607,6 +608,52 @@ img {
   margin: 0.3rem 0 0;
   color: var(--muted);
   font-size: 0.9375rem;
+}
+
+/* Coursework stages on the home page: year on the left, courses on
+   the right. The Pokémon theme adds art and evolution names. */
+
+.evolution {
+  display: grid;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.evo-stage {
+  display: grid;
+  grid-template-columns: 10.5rem minmax(0, 1fr);
+  grid-template-areas: "head courses";
+  gap: 0.5rem 1.5rem;
+  align-items: start;
+}
+
+.evo-head {
+  grid-area: head;
+  padding-top: 0.85rem;
+  border-top: var(--border-width) solid var(--line);
+}
+
+.evo-year {
+  margin: 0;
+  font-size: 1.125rem;
+}
+
+.evo-stage > .courses,
+.evo-stage > .course-upcoming {
+  grid-area: courses;
+}
+
+.course-upcoming {
+  margin: 0;
+  padding-top: 0.85rem;
+  color: var(--muted);
+}
+
+.evo-art,
+.evo-name {
+  display: none;
 }
 
 /* Resume */
@@ -1055,13 +1102,13 @@ img {
   border-top-width: 2px;
 }
 
-[data-theme="pokemon"] .course h3 {
+[data-theme="pokemon"] .course :is(h3, h4) {
   display: flex;
   align-items: center;
   gap: 0.6rem;
 }
 
-[data-theme="pokemon"] .course h3::before {
+[data-theme="pokemon"] .course :is(h3, h4)::before {
   content: "";
   flex: none;
   width: 1rem;
@@ -1076,6 +1123,114 @@ img {
 [data-theme="pokemon"] .course:nth-child(5n + 3) { --badge: #7AC74C; }
 [data-theme="pokemon"] .course:nth-child(5n + 4) { --badge: #EE8130; }
 [data-theme="pokemon"] .course:nth-child(5n + 5) { --badge: #F95587; }
+
+/* Coursework: each school year is an evolution stage in its own card. */
+[data-theme="pokemon"] .evolution {
+  gap: 3.25rem; /* room for the arrow between stages */
+}
+
+[data-theme="pokemon"] .evo-stage {
+  position: relative;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "art head"
+    "art courses";
+  gap: 0.25rem 1.5rem;
+  padding: 1.25rem;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+[data-theme="pokemon"] .evo-head {
+  padding-top: 0;
+  border-top: 0;
+}
+
+[data-theme="pokemon"] .evo-year {
+  font-size: 1.25rem;
+}
+
+[data-theme="pokemon"] .evo-name {
+  display: block;
+  margin: 0.15rem 0 0;
+  color: var(--accent);
+  font-family: var(--font-display);
+}
+
+/* The little screen that shows the stage's drawing. */
+[data-theme="pokemon"] .evo-art {
+  position: relative;
+  display: grid;
+  grid-area: art;
+  place-items: center;
+  overflow: hidden;
+  width: 8.5rem;
+  aspect-ratio: 1;
+  border: 3px solid var(--ink);
+  border-radius: 10px;
+  background: radial-gradient(circle at 50% 55%, #FFFFFF 0 30%, #D6E6F6 75%);
+}
+
+[data-theme="pokemon"] .evo-art svg {
+  position: relative;
+  z-index: 1;
+  width: 82%;
+  height: 82%;
+}
+
+/* A dark backdrop that only shows during the evolution flash. */
+[data-theme="pokemon"] .evo-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #1D2333;
+  opacity: 0;
+}
+
+/* The arrow between stages: this one evolves into the next. */
+[data-theme="pokemon"] .evo-stage + .evo-stage::before {
+  content: "▼";
+  position: absolute;
+  top: -2.4rem;
+  left: 5.5rem;
+  color: var(--accent);
+  font-size: 1.25rem;
+  line-height: 1;
+  transform: translateX(-50%);
+}
+
+/* Before a stage scrolls into view it's a dark "who's that
+   Pokémon?" silhouette. When main.js adds .is-evolved, it flashes
+   white over a dark screen and then appears in color, like the
+   games' evolution scene. Upcoming years stay silhouettes. */
+[data-theme="pokemon"] .evo-stage:not(.is-evolved) .evo-art svg {
+  filter: brightness(0);
+  opacity: 0.85;
+}
+
+[data-theme="pokemon"] .is-evolved .evo-art svg {
+  animation: evolve 1.4s ease-out;
+}
+
+[data-theme="pokemon"] .is-evolved .evo-art::after {
+  animation: evolve-screen 1.4s ease-out;
+}
+
+@keyframes evolve {
+  0%   { filter: brightness(0); transform: scale(0.9); }
+  20%  { filter: brightness(0) invert(1); transform: scale(1.12); }
+  40%  { filter: brightness(0) invert(1); transform: scale(0.94); }
+  60%  { filter: brightness(0) invert(1); transform: scale(1.08); }
+  100% { filter: none; transform: scale(1); }
+}
+
+@keyframes evolve-screen {
+  0%       { opacity: 0; }
+  15%, 65% { opacity: 0.9; }
+  100%     { opacity: 0; }
+}
 
 [data-theme="pokemon"] .pill {
   border-color: var(--ink);
@@ -1398,6 +1553,34 @@ img {
   .site-nav {
     order: 3;
     flex-basis: 100%;
+  }
+
+  .evo-stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "head"
+      "courses";
+  }
+
+  [data-theme="pokemon"] .evo-stage {
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas:
+      "art head"
+      "courses courses";
+    gap: 0.75rem 1rem;
+  }
+
+  [data-theme="pokemon"] .evo-art {
+    width: 5.5rem;
+  }
+
+  [data-theme="pokemon"] .evo-head {
+    align-self: center;
+  }
+
+  [data-theme="pokemon"] .evo-stage + .evo-stage::before {
+    left: 4rem;
   }
 
   /* Drop the Pokédex lights so the name and theme switcher share a row. */

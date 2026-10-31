@@ -40,11 +40,11 @@ Open `js/content.js`. Your name, bio, links, projects, resume and blog list are 
 It's filled in from your resume. A few things you might still want to do:
 
 - [ ] Add a `year` (and `dates`) for the solar-powered RC car
-- [ ] Add course numbers (`code`) and notes to your `coursework`
+- [ ] In `coursework`, move each course to the year you took it and add your freshman courses (course codes and notes are optional)
 - [ ] Add a photo (see below)
 - [ ] Write more blog posts
 
-**The resume page** reads `education`, `coursework`, `leadership`, `experience` and `skills`, plus any project that has `points` (bullet points). Coursework also has its own section on the home page. Projects without `points` only show on the home page. Your phone number is left off on purpose, since public pages get scraped by spam bots.
+**The resume page** reads `education`, `coursework`, `leadership`, `experience` and `skills`, plus any project that has `points` (bullet points). On the home page, coursework is grouped by school year. In the Pokémon theme each year is an evolution stage (egg, then a flame that grows each year) that evolves when you scroll to it. A year marked `upcoming: true` stays a silhouette until you add its courses and remove that line. Projects without `points` only show on the home page. Your phone number is left off on purpose, since public pages get scraped by spam bots.
 
 **Adding a photo:** put it in `assets/` (e.g. `assets/me.jpg`), then set `photo: "assets/me.jpg"` in `content.js`. It replaces the initials circle on the links page.
 

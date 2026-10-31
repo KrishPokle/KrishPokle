@@ -141,15 +141,44 @@ const SITE = {
     { group: "Software & tools", items: ["Next.js", "Supabase", "Stripe", "Vercel", "Git"] },
   ],
 
-  // Classes you've taken, shown on the home page and resume.
-  //   code   optional course number, e.g. "ECEN 214"
-  //   note   optional one-liner: a lab, a project, what you learned
+  // Your classes, grouped by year. On the home page each year is a
+  // stage; in the Pokémon theme it "evolves" as you scroll to it.
+  // The resume shows every course in one list.
+  //   stage     evolution name shown in the Pokémon theme
+  //   art       which drawing: "egg", "small", "medium" or "large"
+  //   upcoming  true for a year you haven't started yet (shown as a
+  //             silhouette until you add courses and remove this)
+  //   courses   each needs a name; "code" and "note" are optional:
+  //             { name: "Circuits", code: "ECEN 214", note: "Built an RC filter in lab." }
+  //
+  // CHECK: these years are a best guess from the usual Texas A&M
+  // ECE order. Move each course to the year you actually took it.
   coursework: [
-    { name: "Circuits", code: "", note: "" },
-    { name: "Signals & Systems", code: "", note: "" },
-    { name: "Electronics", code: "", note: "" },
-    { name: "Digital System Design", code: "", note: "" },
-    { name: "Microcontrollers", code: "", note: "" },
+    {
+      year: "Freshman year",
+      stage: "Egg",
+      art: "egg",
+      courses: [],
+    },
+    {
+      year: "Sophomore year",
+      stage: "Charmander",
+      art: "small",
+      courses: [{ name: "Circuits" }, { name: "Digital System Design" }],
+    },
+    {
+      year: "Junior year",
+      stage: "Charmeleon",
+      art: "medium",
+      courses: [{ name: "Signals & Systems" }, { name: "Electronics" }, { name: "Microcontrollers" }],
+    },
+    {
+      year: "Senior year",
+      stage: "Charizard",
+      art: "large",
+      upcoming: true,
+      courses: [],
+    },
   ],
 
   // ---------- Blog ----------
