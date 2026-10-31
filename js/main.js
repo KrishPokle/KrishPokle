@@ -85,6 +85,17 @@
     name: () => esc(SITE.name),
     tagline: () => esc(SITE.tagline),
 
+    // "No. 001 Engineer Pokémon ELECTRIC STEEL" for the Pokémon theme.
+    // Each type gets a CSS class like "type-electric" for its color.
+    dex: () => {
+      const dex = SITE.pokedex;
+      if (!dex) return "";
+      const types = (dex.types || [])
+        .map((type) => `<span class="type type-${esc(type.toLowerCase())}">${esc(type)}</span>`)
+        .join("");
+      return `<span class="dex-number">No. ${esc(dex.number)}</span> <span>${esc(dex.category)}</span> ${types}`;
+    },
+
     // "krish@web" for the Terminal theme's prompt line.
     "prompt-user": () => esc(SITE.name.split(" ")[0].toLowerCase()) + "@web",
 
@@ -236,7 +247,13 @@
     { id: "links", label: "Links", path: "links.html" },
   ];
 
-  const THEME_NAMES = { lavender: "Lavender", paper: "Paper", terminal: "Terminal", pop: "Pop" };
+  const THEME_NAMES = {
+    pokemon: "Pokémon",
+    lavender: "Lavender",
+    paper: "Paper",
+    terminal: "Terminal",
+    pop: "Pop",
+  };
 
   const current = (id) => (id === page ? ' aria-current="page"' : "");
 
@@ -268,6 +285,7 @@
       <div class="container footer-inner">
         <p>© ${new Date().getFullYear()} ${esc(SITE.name)}</p>
         <p>Made by hand with HTML, CSS and JavaScript.</p>
+        <p class="theme-credit">Pokémon is a trademark of Nintendo, Creatures and Game Freak. This fan theme isn't affiliated with them.</p>
       </div>`;
   }
 

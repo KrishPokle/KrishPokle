@@ -14,6 +14,16 @@ const SITE = {
   location: "Plano, Texas",
   email: "krishpokle@gmail.com",
 
+  // Your Pokédex entry, shown above your name in the Pokémon theme.
+  // Types can be any of the 18: Normal, Fire, Water, Electric, Grass,
+  // Ice, Fighting, Poison, Ground, Flying, Psychic, Bug, Rock, Ghost,
+  // Dragon, Dark, Steel, Fairy.
+  pokedex: {
+    number: "001",
+    category: "Engineer Pokémon",
+    types: ["Electric", "Steel"],
+  },
+
   // Path to a photo of you, e.g. "assets/me.jpg". Leave it empty
   // ("") to show your initials in a circle instead.
   photo: "",
@@ -75,7 +85,7 @@ const SITE = {
     {
       title: "This website",
       year: 2026,
-      description: "My personal site, written by hand in HTML, CSS and JavaScript. It has four themes you can switch between and no build step.",
+      description: "My personal site, written by hand in HTML, CSS and JavaScript. It has five themes you can switch between and no build step.",
       tags: ["HTML", "CSS", "JavaScript"],
       url: "",
       links: [{ label: "Source code", url: "https://github.com/KrishPokle/KrishPokle" }],

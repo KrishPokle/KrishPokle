@@ -2,7 +2,7 @@
 
 A personal site in plain HTML, CSS and JavaScript. There are no frameworks and no build step, so every file is something a browser reads directly.
 
-It has a home page (about, projects, writing, contact), a printable resume, a blog and a link-in-bio page, with four themes visitors can switch between: **Lavender** (the default), **Paper**, **Terminal** and **Pop**.
+It has a home page (about, projects, writing, contact), a printable resume, a blog and a link-in-bio page, with five themes visitors can switch between: **Pokémon** (the default), **Lavender**, **Paper**, **Terminal** and **Pop**.
 
 ## See it on your computer
 
@@ -26,7 +26,7 @@ blog/
   index.html          List of all posts
   hello-world.html    Your first post
   _post-template.html Copy this to write a new post
-css/style.css         All the styling, including the four themes
+css/style.css         All the styling, including the five themes
 js/content.js         ← YOUR INFO. Edit this one.
 js/main.js            Fills the pages in using content.js
 js/theme.js           Remembers which theme a visitor picked
@@ -65,13 +65,17 @@ It'll then show up on the home page and the blog list.
 
 The top of `css/style.css` has one block per theme. Each block is a list of variables like `--bg` (background), `--ink` (text) and `--accent`. Change a color there and the whole theme updates.
 
-New visitors start on Lavender. To change the default, reorder the list at the top of `js/theme.js`: the first theme is the default. To remove a theme, delete it from that list.
+New visitors start on Pokémon. To change the default, reorder the list at the top of `js/theme.js`: the first theme is the default. To remove a theme, delete it from that list.
+
+### The Pokémon theme
+
+Your Pokédex number, category and types are in `pokedex` in `content.js`. Everything Pokémon-looking (the Pokédex header, the Poké Ball, the type badges) is drawn with CSS, not official artwork. Keep it that way: Pokémon sprites, artwork and logos are copyrighted by Nintendo, so don't add them to a public site. The footer credit line shows up automatically while the theme is on.
 
 ## How the pieces fit together
 
 If you want to understand the code, read the files in this order:
 
-1. **`js/theme.js`** runs first, before anything is drawn. It sets `<html data-theme="lavender">` (or `paper`/`terminal`/`pop`).
+1. **`js/theme.js`** runs first, before anything is drawn. It sets `<html data-theme="pokemon">` (or `lavender`/`paper`/`terminal`/`pop`).
 2. **`css/style.css`** has a block for each `[data-theme="..."]` that sets the colors and fonts. Changing that one attribute restyles the whole site.
 3. **`js/content.js`** defines one object, `SITE`, holding all your info.
 4. **`js/main.js`** finds every element with a `data-render="..."` attribute (like `<ul data-render="projects">`) and fills it with HTML built from `SITE`. It also builds the header, footer and theme buttons.
