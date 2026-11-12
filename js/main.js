@@ -145,7 +145,7 @@
     name: () => esc(SITE.name),
     tagline: () => esc(SITE.tagline),
 
-    // "No. 001 Engineer Pokémon ELECTRIC STEEL" for the Pokémon theme.
+    // "No. 001 Engineer Pokémon DRAGON STEEL" for the Pokémon theme.
     // Each type gets a CSS class like "type-electric" for its color.
     dex: () => {
       const dex = SITE.pokedex;

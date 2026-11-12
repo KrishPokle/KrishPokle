@@ -21,7 +21,7 @@ const SITE = {
   pokedex: {
     number: "001",
     category: "Engineer Pokémon",
-    types: ["Electric", "Steel"],
+    types: ["Dragon", "Steel"],
   },
 
   // Path to a photo of you, e.g. "assets/me.jpg". Leave it empty
