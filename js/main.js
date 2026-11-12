@@ -70,18 +70,28 @@
       .map((role) => timelineItem({ dates: role.dates, title: role.role, subtitle: role.org, points: role.points }))
       .join("");
 
-  // One <li> per course. "heading" is h3 or h4, depending on the page.
-  const courseItems = (courses, heading) =>
+  // One <li> per course: its code, name and an optional note.
+  const courseItems = (courses) =>
     courses
       .map(
         (course) => `
           <li class="course">
-            ${course.code ? `<p class="course-code">${esc(course.code)}</p>` : ""}
-            <${heading}>${esc(course.name)}</${heading}>
-            ${course.note ? `<p class="course-note">${esc(course.note)}</p>` : ""}
+            ${course.code ? `<span class="course-code">${esc(course.code)}</span>` : ""}
+            <span class="course-name">${esc(course.name)}</span>
+            ${course.note ? `<span class="course-note">${esc(course.note)}</span>` : ""}
           </li>`
       )
       .join("");
+
+  // A semester: "Fall 2026" plus an optional status tag, then its courses.
+  const termBlock = (term) => `
+    <div class="term">
+      <h4 class="term-name">
+        ${esc(term.term)}
+        ${term.status ? `<span class="term-status">${esc(term.status)}</span>` : ""}
+      </h4>
+      <ul class="courses">${courseItems(term.courses || [])}</ul>
+    </div>`;
 
   // Drawings for the coursework stages (Pokémon theme). They're
   // original SVG shapes in a 100×100 box: an egg, then a flame that
@@ -260,17 +270,28 @@
         )
         .join(""),
 
-    // Resume: every course from every year in one list.
-    coursework: () => courseItems((SITE.coursework || []).flatMap((stage) => stage.courses || []), "h3"),
+    // Resume: just the courses marked resume: true. Ones you haven't
+    // finished get their semester's status ("In progress") as a note.
+    coursework: () =>
+      courseItems(
+        (SITE.coursework || []).flatMap((stage) =>
+          (stage.terms || []).flatMap((term) =>
+            (term.courses || [])
+              .filter((course) => course.resume)
+              .map((course) => ({ ...course, note: course.note || term.status }))
+          )
+        )
+      ),
 
-    // Home: one stage per year. The art and stage name only show in
-    // the Pokémon theme; other themes show a plain list by year.
+    // Home: one stage per year, split into semesters. The art and stage
+    // name only show in the Pokémon theme; other themes show a plain
+    // list by year.
     evolution: () =>
       (SITE.coursework || [])
         .map((stage) => {
-          const courses = stage.courses || [];
-          const list = courses.length
-            ? `<ul class="courses">${courseItems(courses, "h4")}</ul>`
+          const terms = stage.terms || [];
+          const list = terms.length
+            ? `<div class="evo-terms">${terms.map(termBlock).join("")}</div>`
             : stage.upcoming
               ? `<p class="course-upcoming">Courses to come.</p>`
               : "";
@@ -395,7 +416,9 @@
           observer.unobserve(entry.target);
         });
       },
-      { threshold: 0.6 }
+      // Tall cards (lots of courses) may never be 60% on screen at once
+      // on a phone, so a third is enough.
+      { threshold: 0.35 }
     );
     stages.forEach((stage) => observer.observe(stage));
   }

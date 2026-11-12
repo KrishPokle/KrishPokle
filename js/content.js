@@ -141,9 +141,9 @@ const SITE = {
     { group: "Software & tools", items: ["Next.js", "Supabase", "Stripe", "Vercel", "Git"] },
   ],
 
-  // Your classes, grouped by year. On the home page each year is a
-  // stage; in the Pokémon theme it "evolves" as you scroll to it.
-  // The resume shows every course in one list.
+  // Your classes, grouped by school year and then by semester. On the
+  // home page each year is a stage; in the Pokémon theme it "evolves"
+  // as you scroll to it.
   //   stage     evolution name shown in the Pokémon theme
   //   art       which drawing: "egg", "small", "medium" or "large".
   //             An "egg" stage cracks as you scroll and hatches instead
@@ -152,33 +152,98 @@ const SITE = {
   //             "assets/evolution/charmander.png". Use a PNG with a
   //             transparent background so the silhouette effect works.
   //   upcoming  true for a year you haven't started yet (shown as a
-  //             silhouette until you add courses and remove this)
-  //   courses   each needs a name; "code" and "note" are optional:
-  //             { name: "Circuits", code: "ECEN 214", note: "Built an RC filter in lab." }
-  //
-  // CHECK: these years are a best guess from the usual Texas A&M
-  // ECE order. Move each course to the year you actually took it.
+  //             silhouette until you add its terms and remove this)
+  //   terms     semesters. "status" is optional, e.g. "In progress".
+  //   courses   code and name. Add resume: true to also list a course
+  //             in the Coursework section of the resume page.
   coursework: [
     {
       year: "Freshman year",
       stage: "Egg",
       art: "egg",
       image: "assets/evolution/egg.png",
-      courses: [],
+      terms: [
+        {
+          term: "Transfer credit",
+          courses: [
+            { code: "MATH 151", name: "Engineering Math I" },
+            { code: "MATH 152", name: "Engineering Math II" },
+            { code: "CSCE 110", name: "Programming I" },
+            { code: "ECON 203", name: "Principles of Economics" },
+            { code: "ENGL 104", name: "Composition & Rhetoric" },
+            { code: "ENGL 203", name: "Writing About Literature" },
+            { code: "ENGL 241", name: "Advanced Composition" },
+            { code: "GEOG 201", name: "Intro to Human Geography" },
+            { code: "HIST 104", name: "World History Since 1500" },
+            { code: "HIST 105", name: "History of the U.S." },
+            { code: "HIST 106", name: "History of the U.S." },
+            { code: "PHYS 202", name: "College Physics" },
+            { code: "PHYS 205", name: "Concepts of Physics" },
+            { code: "PHYS 207", name: "Electricity & Magnetism for Engineers & Scientists" },
+            { code: "PHYS 227", name: "Electricity & Magnetism Lab" },
+            { code: "POLS 206", name: "American National Government" },
+          ],
+        },
+        {
+          term: "Fall 2025",
+          courses: [
+            { code: "CHEM 107", name: "General Chemistry for Engineers" },
+            { code: "CHEM 117", name: "General Chemistry for Engineers Lab" },
+            { code: "ENGR 102", name: "Engineering Lab I: Computation (Honors)" },
+            { code: "FYEX 101", name: "Hullabaloo U" },
+            { code: "MATH 251", name: "Engineering Math III" },
+            { code: "POLS 207", name: "State & Local Government" },
+            { code: "ENGR 181", name: "Engineering Honors Seminar I" },
+          ],
+        },
+        {
+          term: "Spring 2026",
+          courses: [
+            { code: "CSCE 120", name: "Program Design & Concepts", resume: true },
+            { code: "ENGR 216", name: "Experimental Physics & Engineering Lab II: Mechanics (Honors)" },
+            { code: "FILM 215", name: "Global Cinema" },
+            { code: "MATH 308", name: "Differential Equations", resume: true },
+            { code: "PHYS 206", name: "Newtonian Mechanics for Engineers & Scientists" },
+          ],
+        },
+      ],
     },
     {
       year: "Sophomore year",
       stage: "Charmander",
       art: "small",
       image: "",
-      courses: [{ name: "Circuits" }, { name: "Digital System Design" }],
+      terms: [
+        {
+          term: "Fall 2026",
+          status: "In progress",
+          courses: [
+            { code: "ECEN 248", name: "Intro to Digital System Design", resume: true },
+            { code: "ECEN 250", name: "Machine Learning", resume: true },
+            { code: "ENGR 217", name: "Experimental Physics & Engineering Lab III: Electricity & Magnetism (Honors)" },
+            { code: "MATH 311", name: "Topics in Applied Math I", resume: true },
+            { code: "PHYS 222", name: "Modern Physics for Engineers" },
+          ],
+        },
+        {
+          term: "Spring 2027",
+          status: "Registered",
+          courses: [
+            { code: "ECEN 214", name: "Electrical Circuit Theory", resume: true },
+            { code: "ECEN 303", name: "Random Signals & Systems", resume: true },
+            { code: "ECEN 350", name: "Computer Architecture & Design", resume: true },
+            { code: "MATH 401", name: "Advanced Engineering Math", resume: true },
+          ],
+        },
+      ],
     },
     {
       year: "Junior year",
       stage: "Charmeleon",
       art: "medium",
       image: "",
-      courses: [{ name: "Signals & Systems" }, { name: "Electronics" }, { name: "Microcontrollers" }],
+      upcoming: true,
+      terms: [],
     },
     {
       year: "Senior year",
@@ -186,7 +251,7 @@ const SITE = {
       art: "large",
       image: "",
       upcoming: true,
-      courses: [],
+      terms: [],
     },
   ],
 
