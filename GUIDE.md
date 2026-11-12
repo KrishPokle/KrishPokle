@@ -2,7 +2,7 @@
 
 A personal site in plain HTML, CSS and JavaScript. There are no frameworks and no build step, so every file is something a browser reads directly.
 
-It has a home page (about, projects, writing, contact), a printable resume, a blog and a link-in-bio page, with three themes visitors can switch between: **Paper**, **Terminal** and **Pop**.
+It has a home page (about, projects, writing, contact), a printable resume, a blog and a link-in-bio page, with five themes visitors can switch between: **Pokémon** (the default), **Lavender**, **Paper**, **Terminal** and **Pop**.
 
 ## See it on your computer
 
@@ -26,7 +26,7 @@ blog/
   index.html          List of all posts
   hello-world.html    Your first post
   _post-template.html Copy this to write a new post
-css/style.css         All the styling, including the three themes
+css/style.css         All the styling, including the five themes
 js/content.js         ← YOUR INFO. Edit this one.
 js/main.js            Fills the pages in using content.js
 js/theme.js           Remembers which theme a visitor picked
@@ -37,12 +37,18 @@ assets/               Images (favicon, your photo)
 
 Open `js/content.js`. Your name, bio, links, projects, resume and blog list are all in there, and every page updates from it.
 
-Anything that says "your ..." or `example.com` is a placeholder. Replace those before you publish:
+It's filled in from your resume. A few things you might still want to do:
 
-- [ ] `tagline`, `location` and `email`
-- [ ] Your LinkedIn link (or set its `url` to `""` to hide it)
-- [ ] The `about` paragraphs
-- [ ] `projects`, `experience`, `education` and `skills`
+- [ ] Add a `year` (and `dates`) for the solar-powered RC car
+- [ ] Each semester, update `coursework`: change a term's `status` (or remove it once grades are in) and add next semester's classes
+- [ ] Add a photo (see below)
+- [ ] Write more blog posts
+
+**Your resume PDF** is `assets/Krish-Pokle-Resume.pdf`, and the button on the resume page downloads it. When you update your resume, replace that file with the new PDF using the same name. It includes whatever contact details are in the PDF, so leave your phone number out of the web copy if you don't want it public.
+
+**The resume page** reads `education`, `leadership`, `experience` and `skills`, any project that has `points` (bullet points), and the courses marked `resume: true`. On the home page, coursework is grouped by school year and then by semester (`terms`), with every course listed. In the Pokémon theme each year is an evolution stage (egg, then a flame that grows each year) that evolves when you scroll to it. A year marked `upcoming: true` stays a silhouette until you add its `terms` and remove that line. The `egg` stage is different: instead of evolving, it cracks as you scroll down to it, rocking as the crack spreads, and the top of the shell pops off once it's fully cracked. Scroll back up and it closes again.
+
+**Using your own pictures for the stages:** put an image in `assets/evolution/` (e.g. `assets/evolution/charmander.png`) and set that stage's `image` to the path. It replaces the built-in drawing and still gets the silhouette and evolve effect. Use a PNG with a **transparent background**, or the silhouette will be a solid square. Official Pokémon artwork is copyrighted by Nintendo; using it is your call, and fan art you've drawn or commissioned is the safe option. Projects without `points` only show on the home page. Your phone number is left off on purpose, since public pages get scraped by spam bots.
 
 **Adding a photo:** put it in `assets/` (e.g. `assets/me.jpg`), then set `photo: "assets/me.jpg"` in `content.js`. It replaces the initials circle on the links page.
 
@@ -63,13 +69,17 @@ It'll then show up on the home page and the blog list.
 
 The top of `css/style.css` has one block per theme. Each block is a list of variables like `--bg` (background), `--ink` (text) and `--accent`. Change a color there and the whole theme updates.
 
-The default theme is Paper, or Terminal for visitors whose device is in dark mode. That's decided in `js/theme.js`.
+New visitors start on Pokémon. To change the default, reorder the list at the top of `js/theme.js`: the first theme is the default. To remove a theme, delete it from that list.
+
+### The Pokémon theme
+
+Your Pokédex number, category and types are in `pokedex` in `content.js`. Everything Pokémon-looking (the Pokédex header, the Poké Ball, the type badges) is drawn with CSS, not official artwork. Keep it that way: Pokémon sprites, artwork and logos are copyrighted by Nintendo, so don't add them to a public site. The footer credit line shows up automatically while the theme is on.
 
 ## How the pieces fit together
 
 If you want to understand the code, read the files in this order:
 
-1. **`js/theme.js`** runs first, before anything is drawn. It sets `<html data-theme="paper">` (or `terminal`/`pop`).
+1. **`js/theme.js`** runs first, before anything is drawn. It sets `<html data-theme="pokemon">` (or `lavender`/`paper`/`terminal`/`pop`).
 2. **`css/style.css`** has a block for each `[data-theme="..."]` that sets the colors and fonts. Changing that one attribute restyles the whole site.
 3. **`js/content.js`** defines one object, `SITE`, holding all your info.
 4. **`js/main.js`** finds every element with a `data-render="..."` attribute (like `<ul data-render="projects">`) and fills it with HTML built from `SITE`. It also builds the header, footer and theme buttons.

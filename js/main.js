@@ -52,6 +52,94 @@
     return links;
   };
 
+  // One entry on the resume: dates on the left, details on the right.
+  const timelineItem = ({ dates, title, subtitle, note, points = [] }) => `
+    <li class="timeline-item">
+      <p class="timeline-when">${esc(dates)}</p>
+      <div>
+        <h3>${esc(title)}</h3>
+        ${subtitle ? `<p class="timeline-org">${esc(subtitle)}</p>` : ""}
+        ${note ? `<p class="timeline-note">${esc(note)}</p>` : ""}
+        ${points.length ? `<ul>${points.map((point) => `<li>${esc(point)}</li>`).join("")}</ul>` : ""}
+      </div>
+    </li>`;
+
+  // Jobs and leadership roles share the same shape.
+  const roles = (list = []) =>
+    list
+      .map((role) => timelineItem({ dates: role.dates, title: role.role, subtitle: role.org, points: role.points }))
+      .join("");
+
+  // One <li> per course: its code, name and an optional note.
+  const courseItems = (courses) =>
+    courses
+      .map(
+        (course) => `
+          <li class="course">
+            ${course.code ? `<span class="course-code">${esc(course.code)}</span>` : ""}
+            <span class="course-name">${esc(course.name)}</span>
+            ${course.note ? `<span class="course-note">${esc(course.note)}</span>` : ""}
+          </li>`
+      )
+      .join("");
+
+  // A semester: "Fall 2026" plus an optional status tag, then its courses.
+  const termBlock = (term) => `
+    <div class="term">
+      <h4 class="term-name">
+        ${esc(term.term)}
+        ${term.status ? `<span class="term-status">${esc(term.status)}</span>` : ""}
+      </h4>
+      <ul class="courses">${courseItems(term.courses || [])}</ul>
+    </div>`;
+
+  // Drawings for the coursework stages (Pokémon theme). They're
+  // original SVG shapes in a 100×100 box: an egg, then a flame that
+  // grows each year and finally gets wings.
+  const OUTLINE = 'stroke="#1D2333" stroke-width="3" stroke-linejoin="round" vector-effect="non-scaling-stroke"';
+  const FLAME_OUTER = "M50 6 C61 25 79 40 77 62 C75 81 63 93 50 93 C36 93 23 82 23 63 C23 47 32 40 38 27 C42 38 46 41 50 6 Z";
+  const FLAME_INNER = "M50 40 C57 52 65 60 64 72 C63 83 57 89 50 89 C42 89 36 83 36 73 C36 63 45 57 50 40 Z";
+  const flame = (x, y, size) => `
+    <g transform="translate(${x} ${y}) scale(${size}) translate(-50 -50)">
+      <path d="${FLAME_OUTER}" fill="#F0702C" ${OUTLINE}/>
+      <path d="${FLAME_INNER}" fill="#FFD23F"/>
+    </g>`;
+  const halo = (x, y, size) => `
+    <g transform="translate(${x} ${y}) scale(${size}) translate(-50 -50)">
+      <path d="${FLAME_OUTER}" fill="#D8342C" ${OUTLINE}/>
+    </g>`;
+  const WING = `
+    <path d="M42 58 C31 35 16 24 3 26 C9 34 10 43 7 51 C14 50 20 54 21 62 C27 57 34 58 40 64 Z" fill="#F0702C" ${OUTLINE}/>
+    <path d="M37 57 C29 41 19 33 11 32 C15 38 15 45 13 49 C19 49 23 53 24 58 C28 55 32 56 36 59 Z" fill="#2E9C9A"/>`;
+
+  const EVOLUTION_ART = {
+    egg: `
+      <path d="M50 8 C71 8 84 42 84 61 C84 81 69 93 50 93 C31 93 16 81 16 61 C16 42 29 8 50 8 Z" fill="#FFF4DA" ${OUTLINE}/>
+      <ellipse cx="37" cy="40" rx="7" ry="9" fill="#F0702C"/>
+      <ellipse cx="63" cy="58" rx="9" ry="7" fill="#F0702C"/>
+      <ellipse cx="40" cy="75" rx="5" ry="4" fill="#F0702C"/>`,
+    small: flame(50, 56, 0.62),
+    medium: halo(50, 52, 0.86) + flame(50, 60, 0.6),
+    large: WING + `<g transform="matrix(-1 0 0 1 100 0)">${WING}</g>` + halo(50, 52, 0.78) + flame(50, 60, 0.54),
+  };
+
+  // The egg is drawn twice, as a top and bottom half cut along the
+  // same zigzag as the crack (see .egg-top / .egg-bottom in the CSS),
+  // so the top of the shell can pop off when it hatches. The crack
+  // lines are drawn over it and grow as you scroll.
+  const eggArt = (picture) => `
+    <div class="egg">
+      <div class="egg-half egg-bottom">${picture}</div>
+      <div class="egg-half egg-top">${picture}</div>
+      <svg class="egg-crack" viewBox="0 0 100 100">
+        <path class="crack-main" pathLength="1" d="M50 48 L44 56 L36 46 L28 55 L20 46 L14 51"/>
+        <path class="crack-main" pathLength="1" d="M50 48 L57 57 L65 46 L73 55 L81 47 L86 52"/>
+        <path class="crack-branch" pathLength="1" d="M36 46 L33 38"/>
+        <path class="crack-branch" pathLength="1" d="M65 46 L68 38 L66 33"/>
+        <path class="crack-branch" pathLength="1" d="M57 57 L60 65"/>
+      </svg>
+    </div>`;
+
   const initials = () =>
     SITE.name
       .split(/\s+/)
@@ -66,6 +154,17 @@
   const render = {
     name: () => esc(SITE.name),
     tagline: () => esc(SITE.tagline),
+
+    // "No. 001 Engineer Pokémon DRAGON STEEL" for the Pokémon theme.
+    // Each type gets a CSS class like "type-electric" for its color.
+    dex: () => {
+      const dex = SITE.pokedex;
+      if (!dex) return "";
+      const types = (dex.types || [])
+        .map((type) => `<span class="type type-${esc(type.toLowerCase())}">${esc(type)}</span>`)
+        .join("");
+      return `<span class="dex-number">No. ${esc(dex.number)}</span> <span>${esc(dex.category)}</span> ${types}`;
+    },
 
     // "krish@web" for the Terminal theme's prompt line.
     "prompt-user": () => esc(SITE.name.split(" ")[0].toLowerCase()) + "@web",
@@ -124,6 +223,12 @@
 
     "contact-note": () => esc(SITE.contactNote),
 
+    // The download button on the resume page, saved as "Krish-Pokle-Resume.pdf".
+    "resume-download": () =>
+      SITE.resumePdf
+        ? `<a class="button" href="${esc(url(SITE.resumePdf))}" download="${esc(SITE.name.replace(/\s+/g, "-"))}-Resume.pdf">Download resume (PDF)</a>`
+        : "",
+
     "email-button": () =>
       SITE.email ? `<a class="button" href="mailto:${esc(SITE.email)}">Email ${esc(SITE.email)}</a>` : "",
 
@@ -136,33 +241,27 @@
       return items.join("");
     },
 
-    experience: () =>
-      SITE.experience
-        .map(
-          (job) => `
-            <li class="timeline-item">
-              <p class="timeline-when">${esc(job.start)} – ${esc(job.end)}</p>
-              <div>
-                <h3>${esc(job.role)}</h3>
-                <p class="timeline-org">${esc(job.org)}</p>
-                <ul>${job.points.map((point) => `<li>${esc(point)}</li>`).join("")}</ul>
-              </div>
-            </li>`
-        )
-        .join(""),
+    experience: () => roles(SITE.experience),
+    leadership: () => roles(SITE.leadership),
 
     education: () =>
       SITE.education
-        .map(
-          (school) => `
-            <li class="timeline-item">
-              <p class="timeline-when">${esc(school.start)} – ${esc(school.end)}</p>
-              <div>
-                <h3>${esc(school.degree)}</h3>
-                <p class="timeline-org">${esc(school.school)}</p>
-                ${school.note ? `<p>${esc(school.note)}</p>` : ""}
-              </div>
-            </li>`
+        .map((school) =>
+          timelineItem({ dates: school.dates, title: school.degree, subtitle: school.school, note: school.note })
+        )
+        .join(""),
+
+    // Projects on the resume: only the ones with bullet points.
+    "resume-projects": () =>
+      SITE.projects
+        .filter((project) => project.points?.length)
+        .map((project) =>
+          timelineItem({
+            dates: project.dates || project.year,
+            title: project.title,
+            subtitle: project.role,
+            points: project.points,
+          })
         )
         .join(""),
 
@@ -175,6 +274,50 @@
               <ul class="tags">${group.items.map((skill) => `<li class="tag">${esc(skill)}</li>`).join("")}</ul>
             </div>`
         )
+        .join(""),
+
+    // Resume: just the courses marked resume: true. Ones you haven't
+    // finished get their semester's status ("In progress") as a note.
+    coursework: () =>
+      courseItems(
+        (SITE.coursework || []).flatMap((stage) =>
+          (stage.terms || []).flatMap((term) =>
+            (term.courses || [])
+              .filter((course) => course.resume)
+              .map((course) => ({ ...course, note: course.note || term.status }))
+          )
+        )
+      ),
+
+    // Home: one stage per year, split into semesters. The art and stage
+    // name only show in the Pokémon theme; other themes show a plain
+    // list by year.
+    evolution: () =>
+      (SITE.coursework || [])
+        .map((stage) => {
+          const terms = stage.terms || [];
+          const list = terms.length
+            ? `<div class="evo-terms">${terms.map(termBlock).join("")}</div>`
+            : stage.upcoming
+              ? `<p class="course-upcoming">Courses to come.</p>`
+              : "";
+          // Your own picture if you set one, otherwise the built-in drawing.
+          const picture = stage.image
+            ? `<img src="${esc(url(stage.image))}" alt="" loading="lazy">`
+            : `<svg viewBox="0 0 100 100">${EVOLUTION_ART[stage.art] || ""}</svg>`;
+          const isEgg = stage.art === "egg";
+          const art = isEgg ? eggArt(picture) : picture;
+          const classes = ["evo-stage", stage.upcoming && "is-upcoming", isEgg && "is-egg"].filter(Boolean);
+          return `
+            <li class="${classes.join(" ")}">
+              <div class="evo-art" aria-hidden="true">${art}</div>
+              <div class="evo-head">
+                <h3 class="evo-year">${esc(stage.year)}</h3>
+                <p class="evo-name">${esc(stage.stage)}</p>
+              </div>
+              ${list}
+            </li>`;
+        })
         .join(""),
 
     avatar: () => (SITE.photo ? `<img src="${esc(url(SITE.photo))}" alt="">` : esc(initials())),
@@ -212,7 +355,13 @@
     { id: "links", label: "Links", path: "links.html" },
   ];
 
-  const THEME_NAMES = { paper: "Paper", terminal: "Terminal", pop: "Pop" };
+  const THEME_NAMES = {
+    pokemon: "Pokémon",
+    lavender: "Lavender",
+    paper: "Paper",
+    terminal: "Terminal",
+    pop: "Pop",
+  };
 
   const current = (id) => (id === page ? ' aria-current="page"' : "");
 
@@ -224,7 +373,7 @@
 
     const themeButtons = window.THEMES.map(
       (name) => `
-        <button type="button" data-theme-choice="${name}" aria-pressed="false">
+        <button type="button" data-theme-choice="${name}" aria-pressed="false" title="${THEME_NAMES[name]}">
           <span class="swatch swatch-${name}" aria-hidden="true"></span>
           <span class="theme-name">${THEME_NAMES[name]}</span>
         </button>`
@@ -244,6 +393,7 @@
       <div class="container footer-inner">
         <p>© ${new Date().getFullYear()} ${esc(SITE.name)}</p>
         <p>Made by hand with HTML, CSS and JavaScript.</p>
+        <p class="theme-credit">Pokémon is a trademark of Nintendo, Creatures and Game Freak. This fan theme isn't affiliated with them.</p>
       </div>`;
   }
 
@@ -253,6 +403,67 @@
     const fill = render[slot.dataset.render];
     if (fill) slot.innerHTML = fill(slot);
   });
+
+  /* ---------- Evolve on scroll (Pokémon theme) ----------
+     Each coursework stage evolves the first time it scrolls into
+     view: adding .is-evolved makes the CSS play the animation once.
+     Upcoming years stay as silhouettes. */
+
+  const stages = document.querySelectorAll(".evo-stage:not(.is-upcoming):not(.is-egg)");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    stages.forEach((stage) => stage.classList.add("is-evolved"));
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-evolved");
+          observer.unobserve(entry.target);
+        });
+      },
+      // Tall cards (lots of courses) may never be 60% on screen at once
+      // on a phone, so a third is enough.
+      { threshold: 0.35 }
+    );
+    stages.forEach((stage) => observer.observe(stage));
+  }
+
+  /* ---------- The egg cracks as you scroll (Pokémon theme) ----------
+     --crack goes from 0 to 1 as the egg's card moves from the bottom
+     of the screen to the middle. The CSS uses it to draw the crack,
+     the egg rocks as it cracks, and at 1 the top of the shell pops
+     off. Scrolling back up closes it again. */
+
+  const eggs = document.querySelectorAll(".evo-stage.is-egg");
+  const updateEggs = () => {
+    const screen = window.innerHeight;
+    eggs.forEach((egg) => {
+      const top = egg.getBoundingClientRect().top;
+      const progress = Math.min(1, Math.max(0, (screen * 0.95 - top) / (screen * 0.4)));
+      const hatched = progress >= 0.98;
+      const wobble = hatched ? 0 : Math.sin(progress * 30) * 7 * progress;
+      egg.style.setProperty("--crack", progress.toFixed(3));
+      egg.style.setProperty("--wobble", `${wobble.toFixed(2)}deg`);
+      egg.classList.toggle("is-hatched", hatched);
+    });
+  };
+
+  if (eggs.length) {
+    // Update at most once per frame, however fast the scroll events come.
+    let queued = false;
+    const queueUpdate = () => {
+      if (queued) return;
+      queued = true;
+      requestAnimationFrame(() => {
+        updateEggs();
+        queued = false;
+      });
+    };
+    window.addEventListener("scroll", queueUpdate, { passive: true });
+    window.addEventListener("resize", queueUpdate);
+    updateEggs();
+  }
 
   // <body data-title="Resume"> becomes "Resume | Krish Pokle".
   document.title = body.dataset.title ? `${body.dataset.title} | ${SITE.name}` : SITE.name;
@@ -272,7 +483,6 @@
       window.setTheme(choice.dataset.themeChoice);
       syncThemeButtons();
     }
-    if (event.target.closest('[data-action="print"]')) window.print();
   });
 
   // Always print in the Paper theme (black text on white reads
