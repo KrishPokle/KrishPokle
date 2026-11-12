@@ -223,6 +223,12 @@
 
     "contact-note": () => esc(SITE.contactNote),
 
+    // The download button on the resume page, saved as "Krish-Pokle-Resume.pdf".
+    "resume-download": () =>
+      SITE.resumePdf
+        ? `<a class="button" href="${esc(url(SITE.resumePdf))}" download="${esc(SITE.name.replace(/\s+/g, "-"))}-Resume.pdf">Download resume (PDF)</a>`
+        : "",
+
     "email-button": () =>
       SITE.email ? `<a class="button" href="mailto:${esc(SITE.email)}">Email ${esc(SITE.email)}</a>` : "",
 
@@ -477,7 +483,6 @@
       window.setTheme(choice.dataset.themeChoice);
       syncThemeButtons();
     }
-    if (event.target.closest('[data-action="print"]')) window.print();
   });
 
   // Always print in the Paper theme (black text on white reads

@@ -28,6 +28,10 @@ const SITE = {
   // ("") to show your initials in a circle instead.
   photo: "",
 
+  // Your resume as a PDF, for the download button on the resume page.
+  // To update it, replace this file with your new one (same name).
+  resumePdf: "assets/Krish-Pokle-Resume.pdf",
+
   // Shown on the home page, resume and links page.
   // Set a url to "" to hide that link everywhere.
   socials: [
@@ -40,7 +44,7 @@ const SITE = {
   about: [
     "Hi, I'm Krish. I'm studying electrical engineering at Texas A&M University with a minor in mathematics, as part of the Craig and Brown Honors program in the College of Engineering.",
     "I like building on both sides of the line between hardware and software. That means designing PCBs in KiCad and 3D-printing parts, like the solar-powered RC car below, and shipping full-stack web apps, like <a href=\"https://clampus.com\">Clampus</a>, a platform that helps Texas A&M students find clubs and opportunities.",
-    "Outside of class, I'm a member of IEEE, and I've been a USTA tennis official since 2022, refereeing more than 50 tournaments.",
+    "Outside of class, I'm a member of IEEE, and I've been a USTA tennis official since 2022, refereeing more than 35 tournaments.",
   ],
 
   // The line above the email button in the Contact section.
@@ -130,13 +134,14 @@ const SITE = {
       dates: "Sep 2022 – Present",
       points: [
         "Supervised all aspects of play, ensuring all USTA regulations and ITA guidelines are met.",
-        "Refereed over 50 tournaments, working an average of 20 hours per tournament.",
+        "Coordinated with other officials, site directors and managers to run a tournament with 200 players.",
+        "Refereed over 35 tournaments, working an average of 20 hours per tournament.",
       ],
     },
   ],
 
   skills: [
-    { group: "Languages", items: ["C", "Python", "C++", "Java", "TypeScript"] },
+    { group: "Languages", items: ["Python", "C++", "Java", "TypeScript"] },
     { group: "Hardware", items: ["KiCad", "Fusion 360", "Soldering", "3D printing"] },
     { group: "Software & tools", items: ["Next.js", "Supabase", "Stripe", "Vercel", "Git"] },
   ],
