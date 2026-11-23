@@ -166,9 +166,6 @@
       return `<span class="dex-number">No. ${esc(dex.number)}</span> <span>${esc(dex.category)}</span> ${types}`;
     },
 
-    // "krish@web" for the Terminal theme's prompt line.
-    "prompt-user": () => esc(SITE.name.split(" ")[0].toLowerCase()) + "@web",
-
     pills: () =>
       contactLinks()
         .map((link) => `<li><a class="pill" href="${esc(url(link.url))}">${esc(link.label)}</a></li>`)
@@ -358,9 +355,6 @@
   const THEME_NAMES = {
     pokemon: "Pokémon",
     lavender: "Lavender",
-    paper: "Paper",
-    terminal: "Terminal",
-    pop: "Pop",
   };
 
   const current = (id) => (id === page ? ' aria-current="page"' : "");
@@ -485,12 +479,12 @@
     }
   });
 
-  // Always print in the Paper theme (black text on white reads
+  // Always print in the Lavender theme (the lighter of the two reads
   // best on paper), then switch back afterwards.
   let themeBeforePrint;
   window.addEventListener("beforeprint", () => {
     themeBeforePrint = html.dataset.theme;
-    html.dataset.theme = "paper";
+    html.dataset.theme = "lavender";
   });
   window.addEventListener("afterprint", () => {
     html.dataset.theme = themeBeforePrint;

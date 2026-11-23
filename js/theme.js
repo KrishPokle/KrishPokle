@@ -1,8 +1,7 @@
 /* ==========================================================
    theme.js
-   Picks the theme (Pokémon, Lavender, Paper, Terminal or Pop)
-   before the page is drawn, so you never see a flash of the
-   wrong colors.
+   Picks the theme (Pokémon or Lavender) before the page is drawn,
+   so you never see a flash of the wrong colors.
 
    It's loaded in <head> without "defer" on purpose: it has to
    run before the browser paints anything.
@@ -10,7 +9,7 @@
 
 (() => {
   // The first one is the default for new visitors.
-  const THEMES = ["pokemon", "lavender", "paper", "terminal", "pop"];
+  const THEMES = ["pokemon", "lavender"];
 
   // Use the theme the visitor picked last time, if there is one.
   // (localStorage can throw in private windows, hence try/catch.)

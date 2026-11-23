@@ -2,7 +2,7 @@
 
 A personal site in plain HTML, CSS and JavaScript. There are no frameworks and no build step, so every file is something a browser reads directly.
 
-It has a home page (about, projects, writing, contact), a printable resume, a blog and a link-in-bio page, with five themes visitors can switch between: **Pokémon** (the default), **Lavender**, **Paper**, **Terminal** and **Pop**.
+It has a home page (about, projects, writing, contact), a printable resume, a blog and a link-in-bio page, with two themes visitors can switch between: **Pokémon** (the default) and **Lavender**.
 
 ## See it on your computer
 
@@ -26,7 +26,7 @@ blog/
   index.html          List of all posts
   hello-world.html    Your first post
   _post-template.html Copy this to write a new post
-css/style.css         All the styling, including the five themes
+css/style.css         All the styling, including both themes
 js/content.js         ← YOUR INFO. Edit this one.
 js/main.js            Fills the pages in using content.js
 js/theme.js           Remembers which theme a visitor picked
@@ -79,7 +79,7 @@ Your Pokédex number, category and types are in `pokedex` in `content.js`. Every
 
 If you want to understand the code, read the files in this order:
 
-1. **`js/theme.js`** runs first, before anything is drawn. It sets `<html data-theme="pokemon">` (or `lavender`/`paper`/`terminal`/`pop`).
+1. **`js/theme.js`** runs first, before anything is drawn. It sets `<html data-theme="pokemon">` (or `lavender`).
 2. **`css/style.css`** has a block for each `[data-theme="..."]` that sets the colors and fonts. Changing that one attribute restyles the whole site.
 3. **`js/content.js`** defines one object, `SITE`, holding all your info.
 4. **`js/main.js`** finds every element with a `data-render="..."` attribute (like `<ul data-render="projects">`) and fills it with HTML built from `SITE`. It also builds the header, footer and theme buttons.

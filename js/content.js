@@ -8,8 +8,8 @@ const SITE = {
   name: "Krish Pokle",
 
   // One sentence under your name on the home page.
-  // " " is a space that never breaks, so "Texas A&M" stays on one line.
-  tagline: "Electrical engineering student at Texas A&M. I build things with circuits and code.",
+  // "\u00A0" is a space that never breaks, so "Texas A&M" stays on one line.
+  tagline: "Electrical engineering student at Texas\u00A0A&M.",
 
   location: "Plano, Texas",
   email: "krishpokle@gmail.com",
@@ -44,7 +44,7 @@ const SITE = {
   about: [
     "Hi, I'm Krish. I'm studying electrical engineering at Texas A&M University with a minor in mathematics, as part of the Craig and Brown Honors program in the College of Engineering.",
     "I like building on both sides of the line between hardware and software. That means designing PCBs in KiCad and 3D-printing parts, like the solar-powered RC car below, and shipping full-stack web apps, like <a href=\"https://clampus.com\">Clampus</a>, a platform that helps Texas A&M students find clubs and opportunities.",
-    "Outside of class, I'm a member of IEEE, and I've been a USTA tennis official since 2022, refereeing more than 35 tournaments.",
+    "Outside of class, I'm a member of IEEE, and I've been a USTA tennis official since 2022, refereeing more than 50 tournaments.",
   ],
 
   // The line above the email button in the Contact section.
@@ -56,21 +56,6 @@ const SITE = {
   //   role, dates and points are for the resume page; projects
   //   without points only appear on the home page.
   projects: [
-    {
-      title: "Clampus",
-      year: 2026,
-      description: "A full-stack club and opportunity discovery platform for Texas A&M's 1,300+ student organizations, with AI features built on the Claude API and subscription billing through Stripe.",
-      tags: ["Next.js", "TypeScript", "Supabase", "Stripe", "Claude API"],
-      url: "https://clampus.com",
-      links: [{ label: "clampus.com", url: "https://clampus.com" }],
-      role: "Founder",
-      dates: "May 2026 – Present",
-      points: [
-        "Built and deployed Clampus, a full-stack club and opportunity discovery platform for Texas A&M's 1,300+ student organizations, using Next.js, Supabase and TypeScript, deployed on Vercel.",
-        "Integrated the Anthropic (Claude) API to ship AI features including a personalized club matcher, resume-boosting recommendations, essay assistance and automated research-outreach email drafting.",
-        "Implemented subscription billing with Stripe, including checkout sessions, webhook-driven entitlement syncing, and tiered feature gating for both individual and organization-level plans.",
-      ],
-    },
     {
       title: "Solar-powered RC car",
       year: "",
@@ -87,9 +72,39 @@ const SITE = {
       ],
     },
     {
+      title: "RTL Doctor",
+      year: 2026,
+      description: "An AI agent that finds and repairs bugs in Verilog hardware code, built with a partner for a machine learning course. Its fine-tuned repair model fixes about 74% of checkable bugs, up from a 34% baseline.",
+      tags: ["Python", "Verilog", "LoRA", "DeepSeek Coder", "pandas"],
+      url: "",
+      links: [],
+      role: "Machine Learning Project",
+      dates: "Fall 2026",
+      points: [
+        "Built an AI agent that scans Verilog files to detect and automatically repair hardware description bugs, developed with a partner for a machine learning course.",
+        "Fine-tuned a DeepSeek Coder repair model with LoRA to automatically fix ~74% of checkable Verilog bugs, up from a 34% baseline.",
+        "Engineered a data pipeline of open-source GitHub Verilog with Python-injected bugs (pandas, 80/10/10 train/validation/test split) and paired the repair model with a separate bug-detection model achieving ~72% detection vs. a 32% baseline.",
+      ],
+    },
+    {
+      title: "Clampus",
+      year: 2026,
+      description: "A full-stack club and opportunity discovery platform for Texas A&M's 1,300+ student organizations, with AI features built on the Claude API and subscription billing through Stripe.",
+      tags: ["Next.js", "TypeScript", "Supabase", "Stripe", "Claude API"],
+      url: "https://clampus.com",
+      links: [{ label: "clampus.com", url: "https://clampus.com" }],
+      role: "Founder",
+      dates: "May 2026 – Present",
+      points: [
+        "Built and deployed Clampus, a full-stack club and opportunity discovery platform for Texas A&M's 1,300+ student organizations, using Next.js, Supabase and TypeScript, deployed on Vercel.",
+        "Integrated the Anthropic (Claude) API to ship AI features including a personalized club matcher, resume-boosting recommendations, essay assistance and automated research-outreach email drafting.",
+        "Implemented subscription billing with Stripe, including checkout sessions, webhook-driven entitlement syncing, and tiered feature gating for both individual and organization-level plans.",
+      ],
+    },
+    {
       title: "This website",
       year: 2026,
-      description: "My personal site, written by hand in HTML, CSS and JavaScript. It has five themes you can switch between and no build step.",
+      description: "My personal site, written by hand in HTML, CSS and JavaScript. It has two themes you can switch between and no build step.",
       tags: ["HTML", "CSS", "JavaScript"],
       url: "",
       links: [{ label: "Source code", url: "https://github.com/KrishPokle/KrishPokle" }],
@@ -134,14 +149,13 @@ const SITE = {
       dates: "Sep 2022 – Present",
       points: [
         "Supervised all aspects of play, ensuring all USTA regulations and ITA guidelines are met.",
-        "Coordinated with other officials, site directors and managers to run a tournament with 200 players.",
-        "Refereed over 35 tournaments, working an average of 20 hours per tournament.",
+        "Refereed over 50 tournaments, working an average of 20 hours per tournament.",
       ],
     },
   ],
 
   skills: [
-    { group: "Languages", items: ["Python", "C++", "Java", "TypeScript"] },
+    { group: "Languages", items: ["C", "Python", "C++", "Java", "TypeScript", "SQL"] },
     { group: "Hardware", items: ["KiCad", "Fusion 360", "Soldering", "3D printing"] },
     { group: "Software & tools", items: ["Next.js", "Supabase", "Stripe", "Vercel", "Git"] },
   ],
