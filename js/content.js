@@ -8,8 +8,8 @@ const SITE = {
   name: "Krish Pokle",
 
   // One sentence under your name on the home page.
-  // " " is a space that never breaks, so "Texas A&M" stays on one line.
-  tagline: "Electrical engineering student at Texas A&M. I build things with circuits and code.",
+  // "\u00A0" is a space that never breaks, so "Texas A&M" stays on one line.
+  tagline: "Electrical engineering student at Texas\u00A0A&M.",
 
   location: "Plano, Texas",
   email: "krishpokle@gmail.com",
