@@ -89,7 +89,7 @@ const SITE = {
     {
       title: "This website",
       year: 2026,
-      description: "My personal site, written by hand in HTML, CSS and JavaScript. It has five themes you can switch between and no build step.",
+      description: "My personal site, written by hand in HTML, CSS and JavaScript. It has two themes you can switch between and no build step.",
       tags: ["HTML", "CSS", "JavaScript"],
       url: "",
       links: [{ label: "Source code", url: "https://github.com/KrishPokle/KrishPokle" }],

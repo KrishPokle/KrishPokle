@@ -74,79 +74,6 @@
   --shadow: none;
 }
 
-/* Paper: clean and minimal. */
-[data-theme="paper"] {
-  color-scheme: light;
-  --bg: #F9FAFB;
-  --surface: #ECEFF3;
-  --ink: #141821;
-  --muted: #565E6D;
-  --line: #D9DDE4;
-  --accent: #2740D9;
-  --on-accent: #FFFFFF;
-  --link: #2740D9;
-  --focus: #2740D9;
-  --font-display: "Schibsted Grotesk", system-ui, sans-serif;
-  --font-body: "Schibsted Grotesk", system-ui, sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --display-weight: 800;
-  --display-tracking: -0.045em;
-  --radius: 8px;
-  --border-width: 1px;
-  --shadow: none;
-}
-
-/* Terminal: dark and techy. Amber phosphor on midnight blue. */
-[data-theme="terminal"] {
-  color-scheme: dark;
-  --bg: #12142A;
-  --surface: #1B1E3C;
-  --ink: #E4E2F4;
-  --muted: #9D9BBF;
-  --line: #2E3262;
-  --accent: #FFB547;
-  --accent-2: #7DDFD6;
-  --on-accent: #12142A;
-  --link: #FFB547;
-  --focus: #7DDFD6;
-  --font-display: "IBM Plex Mono", ui-monospace, monospace;
-  --font-body: "IBM Plex Sans", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
-  --display-weight: 600;
-  --display-tracking: -0.03em;
-  --radius: 3px;
-  --border-width: 1px;
-  --shadow: none;
-}
-
-/* Pop: bold and colorful. Thick outlines, hard shadows. */
-[data-theme="pop"] {
-  color-scheme: light;
-  --bg: #F1EBFF;
-  --surface: #FFFFFF;
-  --ink: #1E1240;
-  --muted: #4E4372;
-  --line: #1E1240;
-  --accent: #FF4F8B;
-  --accent-2: #19C3B1;
-  --accent-3: #FFD43B;
-  --on-accent: #1E1240;
-  --link: #C4125A;
-  --focus: #1E1240;
-  --tint-1: #FFE9A6;   /* yellow */
-  --tint-2: #C6F3EC;   /* mint */
-  --tint-3: #FFD3E3;   /* pink */
-  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
-  --font-body: "Bricolage Grotesque", system-ui, sans-serif;
-  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-  --display-weight: 800;
-  --display-tracking: -0.035em;
-  --radius: 16px;
-  --border-width: 3px;
-  --shadow: 5px 5px 0 var(--ink);
-}
-
-
 /* ---------- 2. Base ---------- */
 
 *,
@@ -410,9 +337,6 @@ img {
 
 .swatch-pokemon  { background: linear-gradient(#DC0A2D 0 42%, #1D2333 42% 58%, #FFFFFF 58%); }
 .swatch-lavender { background: linear-gradient(135deg, #F5F1FB 50%, #7A58C1 50%); }
-.swatch-paper    { background: linear-gradient(135deg, #F9FAFB 50%, #2740D9 50%); }
-.swatch-terminal { background: linear-gradient(135deg, #12142A 50%, #FFB547 50%); }
-.swatch-pop      { background: linear-gradient(135deg, #FF4F8B 50%, #FFD43B 50%); }
 
 .site-footer {
   margin-top: var(--space-section);
@@ -456,9 +380,7 @@ img {
   line-height: 1.3;
 }
 
-/* Only the Terminal theme shows the prompt line, and only the
-   Pokémon theme shows the Pokédex line and the footer credit. */
-.hero-prompt,
+/* Only the Pokémon theme shows the Pokédex line and the footer credit. */
 .hero-dex,
 .theme-credit {
   display: none;
@@ -1340,6 +1262,10 @@ img {
   opacity: 0;
 }
 
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
 @keyframes evolve {
   0%   { filter: brightness(0); transform: scale(0.9); }
   20%  { filter: brightness(0) invert(1); transform: scale(1.12); }
@@ -1438,211 +1364,6 @@ img {
   border-color: var(--accent);
 }
 
-/* Paper: let the hero name dominate; everything else stays quiet. */
-[data-theme="paper"] .hero-name {
-  font-weight: 800;
-}
-
-/* Terminal: a typed prompt above your name, monospace UI,
-   markdown-style headings and [bracketed] tags. */
-
-[data-theme="terminal"] .hero-prompt {
-  display: block;
-  margin: 0 0 1.25rem;
-  color: var(--muted);
-  font-family: var(--font-mono);
-}
-
-[data-theme="terminal"] .prompt-user {
-  color: var(--accent-2);
-}
-
-/* "whoami" types itself out, one letter at a time. */
-[data-theme="terminal"] .prompt-cmd {
-  display: inline-block;
-  overflow: hidden;
-  width: 0;
-  color: var(--ink);
-  white-space: nowrap;
-  vertical-align: bottom;
-  animation: type 0.6s steps(6, end) 0.4s forwards;
-}
-
-[data-theme="terminal"] .caret {
-  display: inline-block;
-  width: 0.6em;
-  height: 1.15em;
-  margin-left: 0.15em;
-  background: var(--accent);
-  vertical-align: text-bottom;
-  animation: blink 1s steps(1) 1s 6;
-}
-
-@keyframes type {
-  to { width: 6ch; }
-}
-
-@keyframes blink {
-  50% { opacity: 0; }
-}
-
-[data-theme="terminal"] .brand,
-[data-theme="terminal"] .site-nav,
-[data-theme="terminal"] .theme-switch,
-[data-theme="terminal"] .pill,
-[data-theme="terminal"] .button,
-[data-theme="terminal"] .link-button,
-[data-theme="terminal"] .project-year,
-[data-theme="terminal"] .timeline-when,
-[data-theme="terminal"] .post-item time,
-[data-theme="terminal"] .post-date,
-[data-theme="terminal"] .course-code,
-[data-theme="terminal"] .site-footer {
-  font-family: var(--font-mono);
-}
-
-[data-theme="terminal"] .hero-name {
-  color: var(--ink);
-}
-
-[data-theme="terminal"] .section > h2::before,
-[data-theme="terminal"] .section-aside h2::before,
-[data-theme="terminal"] .prose h2::before {
-  content: "## ";
-  color: var(--accent);
-  font-weight: 400;
-  letter-spacing: 0;
-}
-
-[data-theme="terminal"] .project h3::before {
-  content: "./";
-  color: var(--muted);
-}
-
-[data-theme="terminal"] .tag {
-  padding: 0;
-  border-radius: 0;
-  background: none;
-  color: var(--accent-2);
-  font-family: var(--font-mono);
-}
-
-[data-theme="terminal"] .tag::before { content: "["; color: var(--muted); }
-[data-theme="terminal"] .tag::after  { content: "]"; color: var(--muted); }
-
-[data-theme="terminal"] .pill {
-  border-radius: var(--radius);
-}
-
-[data-theme="terminal"] .pill:hover,
-[data-theme="terminal"] .link-button:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-/* Pop: a shadowed name, sticker headings and tags, and
-   chunky colored cards that press down when clicked. */
-
-[data-theme="pop"] .hero-name {
-  text-shadow: 0.045em 0.045em 0 var(--accent);
-}
-
-[data-theme="pop"] .section > h2,
-[data-theme="pop"] .section-aside h2 {
-  display: inline-block;
-  padding: 0.15em 0.5em;
-  border: 3px solid var(--ink);
-  border-radius: 10px;
-  background: var(--accent-3);
-  box-shadow: 3px 3px 0 var(--ink);
-  transform: rotate(-2deg);
-}
-
-[data-theme="pop"] .section > h2 {
-  justify-self: start;
-}
-
-[data-theme="pop"] .tag {
-  border-radius: 6px;
-  background: var(--ink);
-  color: var(--bg);
-  font-weight: 700;
-  transform: rotate(-2deg);
-}
-
-[data-theme="pop"] .tag:nth-child(even) {
-  background: var(--accent-2);
-  color: var(--ink);
-  transform: rotate(2deg);
-}
-
-[data-theme="pop"] .project {
-  padding: 1.25rem 1.5rem 1.5rem;
-  border: 3px solid var(--ink);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-}
-
-[data-theme="pop"] .project:nth-child(3n + 1) { background: var(--tint-1); }
-[data-theme="pop"] .project:nth-child(3n + 2) { background: var(--tint-2); }
-[data-theme="pop"] .project:nth-child(3n + 3) { background: var(--tint-3); }
-
-[data-theme="pop"] .project-desc,
-[data-theme="pop"] .project-year {
-  color: var(--ink);
-}
-
-[data-theme="pop"] .pill,
-[data-theme="pop"] .link-button,
-[data-theme="pop"] .button {
-  border: 3px solid var(--ink);
-  font-weight: 700;
-  transition: transform 0.1s ease, box-shadow 0.1s ease;
-}
-
-[data-theme="pop"] .pill {
-  background: var(--surface);
-  box-shadow: 3px 3px 0 var(--ink);
-}
-
-[data-theme="pop"] .link-buttons li:nth-child(3n + 1) .link-button { background: var(--tint-1); }
-[data-theme="pop"] .link-buttons li:nth-child(3n + 2) .link-button { background: var(--tint-2); }
-[data-theme="pop"] .link-buttons li:nth-child(3n + 3) .link-button { background: var(--tint-3); }
-
-[data-theme="pop"] .link-button .handle {
-  color: var(--ink);
-}
-
-[data-theme="pop"] .pill:hover,
-[data-theme="pop"] .link-button:hover,
-[data-theme="pop"] .button:hover {
-  filter: none;
-  transform: translate(-2px, -2px);
-  box-shadow: 7px 7px 0 var(--ink);
-}
-
-[data-theme="pop"] .pill:active,
-[data-theme="pop"] .link-button:active,
-[data-theme="pop"] .button:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0 0 0 var(--ink);
-}
-
-[data-theme="pop"] .avatar {
-  border: 3px solid var(--ink);
-  box-shadow: var(--shadow);
-}
-
-[data-theme="pop"] .theme-switch {
-  background: var(--surface);
-}
-
-[data-theme="pop"] .prose blockquote {
-  border-left-width: 6px;
-  color: var(--ink);
-}
-
-
 /* ---------- 6. Small screens, reduced motion, print ---------- */
 
 @media (max-width: 48rem) {
@@ -1701,7 +1422,7 @@ img {
 
 /* Below laptop width, theme buttons show just their swatches
    so the header fits. The names stay readable by screen readers. */
-@media (max-width: 66rem) {
+@media (max-width: 56rem) {
   .theme-name {
     position: absolute;
     width: 1px;
@@ -1731,7 +1452,7 @@ img {
   }
 }
 
-/* main.js switches to the Paper theme while printing. */
+/* main.js switches to the Lavender theme while printing. */
 @media print {
   .site-header,
   .site-footer,
